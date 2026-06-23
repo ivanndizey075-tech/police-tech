@@ -1,0 +1,1946 @@
+cat > /mnt/user-data/outputs/PoliceTech_Pro_v2.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PoliceTech Pro v2 — Integrated Law Enforcement System</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#06111f;--navy-2:#0d1e33;--navy-3:#122440;--blue:#1a3a6b;
+  --accent:#2E6DB4;--accent-light:#4a8fd4;--gold:#f0a500;
+  --green:#00c97d;--red:#e63b3b;--orange:#f07030;
+  --white:#f0f4f8;--gray-1:#a8b8cc;--gray-2:#4a5a6e;--gray-3:#1e2e42;
+  --border:rgba(42,90,150,0.25);
+  --font-display:'Rajdhani',sans-serif;--font-body:'IBM Plex Sans',sans-serif;--font-mono:'IBM Plex Mono',monospace;
+  --civ-bg:#f8f9fa;--civ-primary:#1565C0;--civ-accent:#0288D1;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body,#root{height:100%;background:var(--navy);color:var(--white);font-family:var(--font-body);font-size:14px}
+button{cursor:pointer}
+input,textarea,select{font-family:var(--font-body)}
+.hidden{display:none!important}
+
+/* ── SCROLLBAR ─────────────────────────────────────────── */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:var(--gray-2);border-radius:2px}
+
+/* ── ANIMATIONS ────────────────────────────────────────── */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes slideIn{from{transform:translateX(-20px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.fade-in{animation:fadeIn .3s ease both}
+.pulse{animation:pulse 2s ease infinite}
+
+/* ── COMMON COMPONENTS ─────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:6px;font-family:var(--font-display);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border:none;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-light)}
+.btn-gold{background:var(--gold);color:var(--navy)}.btn-gold:hover{background:#ffc020}
+.btn-ghost{background:transparent;color:var(--gray-1);border:1px solid var(--border)}.btn-ghost:hover{background:var(--navy-3);color:var(--white)}
+.btn-danger{background:var(--red);color:#fff}.btn-danger:hover{background:#ff5555}
+.btn-green{background:var(--green);color:var(--navy)}.btn-green:hover{background:#00e88d}
+.btn-sm{padding:5px 12px;font-size:11px}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:3px;font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.5px;text-transform:uppercase}
+.badge-green{background:rgba(0,201,125,.15);color:var(--green);border:1px solid rgba(0,201,125,.3)}
+.badge-red{background:rgba(230,59,59,.15);color:var(--red);border:1px solid rgba(230,59,59,.3)}
+.badge-gold{background:rgba(240,165,0,.15);color:var(--gold);border:1px solid rgba(240,165,0,.3)}
+.badge-blue{background:rgba(46,109,180,.2);color:var(--accent-light);border:1px solid rgba(46,109,180,.4)}
+.badge-orange{background:rgba(240,112,48,.15);color:var(--orange);border:1px solid rgba(240,112,48,.3)}
+.input{background:var(--navy-3);border:1px solid var(--border);border-radius:6px;padding:9px 14px;color:var(--white);font-size:13px;outline:none;transition:border-color .15s;width:100%}
+.input:focus{border-color:var(--accent)}
+.input::placeholder{color:var(--gray-2)}
+.card{background:var(--navy-2);border:1px solid var(--border);border-radius:8px;padding:20px}
+.card-header{font-family:var(--font-display);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gray-1);margin-bottom:14px}
+.page-title{font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.page-title span{color:var(--gold)}
+.page-subtitle{font-size:11px;color:var(--gray-1);font-family:var(--font-mono);letter-spacing:1px;margin-top:2px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s ease infinite;display:inline-block}
+.stat-card{background:var(--navy-2);border:1px solid var(--border);border-radius:8px;padding:16px 18px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
+.stat-card.gold::before{background:var(--gold)}.stat-card.green::before{background:var(--green)}.stat-card.red::before{background:var(--red)}
+.stat-label{font-family:var(--font-mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-1);margin-bottom:6px}
+.stat-value{font-family:var(--font-display);font-size:28px;font-weight:700;line-height:1}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{font-family:var(--font-mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-1);padding:9px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.data-table td{padding:11px 12px;border-bottom:1px solid rgba(42,90,150,.1);font-size:13px}
+.data-table tr:hover td{background:rgba(46,109,180,.06)}
+.flex-row{display:flex;align-items:center;gap:10px}
+.flex-between{display:flex;align-items:center;justify-content:space-between}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.toast{position:fixed;top:20px;right:20px;z-index:9999;background:var(--navy-2);border:1px solid var(--green);border-radius:8px;padding:12px 20px;font-family:var(--font-mono);font-size:12px;color:var(--green);box-shadow:0 4px 20px rgba(0,201,125,.3);animation:fadeIn .2s ease}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;animation:fadeIn .2s ease}
+.modal{background:var(--navy-2);border:1px solid var(--border);border-radius:12px;padding:28px;min-width:420px;max-width:90vw;max-height:90vh;overflow-y:auto}
+.modal-title{font-family:var(--font-display);font-size:18px;font-weight:700;letter-spacing:2px;margin-bottom:20px;color:var(--white)}
+.form-group{margin-bottom:14px}
+.form-label{font-family:var(--font-mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gray-1);margin-bottom:5px;display:block}
+select.input{background:var(--navy-3);cursor:pointer}
+select.input option{background:var(--navy-2)}
+hr.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
+
+/* ══════════════════════════════════════════════════════════
+   LOGIN SCREEN
+══════════════════════════════════════════════════════════ */
+#login-screen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 30% 40%,rgba(46,109,180,.15) 0%,transparent 60%),
+             radial-gradient(ellipse at 70% 70%,rgba(240,165,0,.08) 0%,transparent 50%),
+             var(--navy);
+}
+.login-box{
+  width:420px;background:var(--navy-2);border:1px solid var(--border);
+  border-radius:14px;padding:40px;box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo-icon{
+  width:56px;height:56px;background:var(--gold);color:var(--navy);
+  border-radius:12px;display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:32px;font-weight:700;margin-bottom:10px;
+}
+.login-logo-text{font-family:var(--font-display);font-size:22px;font-weight:700;letter-spacing:4px}
+.login-logo-sub{font-family:var(--font-mono);font-size:9px;letter-spacing:3px;color:var(--gold);margin-top:3px}
+.portal-tabs{display:flex;gap:8px;margin-bottom:24px}
+.portal-tab{
+  flex:1;padding:10px;border-radius:7px;border:1px solid var(--border);
+  background:transparent;color:var(--gray-1);
+  font-family:var(--font-display);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.portal-tab.active{background:rgba(46,109,180,.2);border-color:var(--accent);color:var(--white)}
+.portal-tab .tab-icon{font-size:20px}
+.login-error{background:rgba(230,59,59,.1);border:1px solid rgba(230,59,59,.3);border-radius:6px;padding:10px 14px;color:var(--red);font-size:12px;margin-bottom:14px;display:none}
+.login-error.show{display:block}
+
+/* ══════════════════════════════════════════════════════════
+   APP SHELL
+══════════════════════════════════════════════════════════ */
+#app-shell{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:210px;min-width:210px;background:var(--navy);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.sidebar-logo{display:flex;align-items:center;gap:10px;padding:18px 16px;border-bottom:1px solid var(--border)}
+.sidebar-logo-icon{width:34px;height:34px;background:var(--gold);color:var(--navy);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:20px;font-weight:700;flex-shrink:0}
+.sidebar-logo-text{font-family:var(--font-display);font-size:14px;font-weight:700;letter-spacing:3px;line-height:1}
+.sidebar-logo-sub{font-family:var(--font-mono);font-size:8px;letter-spacing:2px;color:var(--gold);margin-top:2px}
+.sidebar-status{display:flex;align-items:center;gap:7px;padding:7px 16px;background:rgba(0,201,125,.06);border-bottom:1px solid rgba(42,90,150,.15);font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--green)}
+.sidebar-nav{flex:1;padding:12px 8px;overflow-y:auto}
+.nav-section-label{font-family:var(--font-mono);font-size:9px;letter-spacing:2px;color:var(--gray-2);padding:10px 10px 6px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:6px;border:none;background:transparent;color:var(--gray-1);font-family:var(--font-body);font-size:13px;font-weight:500;transition:all .15s;width:100%;text-align:left;position:relative}
+.nav-item:hover{background:var(--navy-3);color:var(--white)}
+.nav-item.active{background:rgba(46,109,180,.15);color:var(--white)}
+.nav-item .nav-icon{font-size:15px;width:20px;text-align:center;color:var(--gray-2)}
+.nav-item.active .nav-icon{color:var(--gold)}
+.nav-item .nav-badge{margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 6px;font-size:9px;font-weight:700;font-family:var(--font-mono)}
+.nav-active-bar{position:absolute;right:0;top:20%;bottom:20%;width:3px;background:var(--gold);border-radius:2px}
+.sidebar-footer{padding:12px 14px;border-top:1px solid var(--border)}
+.officer-card{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.officer-avatar{width:32px;height:32px;border-radius:50%;background:rgba(46,109,180,.3);border:1px solid rgba(46,109,180,.5);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:11px;color:var(--accent-light);flex-shrink:0;overflow:hidden}
+.officer-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.main-content{flex:1;overflow-y:auto;background:var(--navy)}
+.page{padding:24px 28px}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+
+/* ══════════════════════════════════════════════════════════
+   CHAT (Instagram-style)
+══════════════════════════════════════════════════════════ */
+.chat-shell{display:flex;height:100vh;overflow:hidden}
+.chat-list-panel{width:330px;min-width:330px;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--navy-2)}
+.chat-list-header{padding:16px;border-bottom:1px solid var(--border)}
+.chat-list-search{padding:10px 16px;border-bottom:1px solid var(--border)}
+.chat-item{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;transition:background .15s;border-bottom:1px solid rgba(42,90,150,.1);position:relative}
+.chat-item:hover{background:var(--navy-3)}
+.chat-item.active{background:rgba(46,109,180,.12)}
+.chat-item.pending{border-left:3px solid var(--gold)}
+.chat-item.active-chat{border-left:3px solid var(--green)}
+.chat-avatar{width:44px;height:44px;border-radius:50%;background:rgba(46,109,180,.25);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--accent-light);flex-shrink:0;position:relative;overflow:hidden}
+.chat-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.chat-status-dot{position:absolute;bottom:1px;right:1px;width:10px;height:10px;border-radius:50%;border:2px solid var(--navy-2)}
+.chat-info{flex:1;min-width:0}
+.chat-name{font-weight:600;font-size:13px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-preview{font-size:11px;color:var(--gray-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.chat-time{font-family:var(--font-mono);font-size:9px;color:var(--gray-2)}
+.unread-badge{background:var(--accent);color:#fff;border-radius:10px;padding:1px 7px;font-size:9px;font-weight:700}
+.chat-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.chat-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.messages-area{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:4px}
+.msg-bubble{max-width:68%;padding:10px 14px;border-radius:18px;font-size:13px;line-height:1.5;position:relative;word-break:break-word}
+.msg-bubble.sent{background:var(--accent);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.msg-bubble.recv{background:var(--navy-3);color:var(--white);border-bottom-left-radius:4px;align-self:flex-start}
+.msg-bubble.system-msg{background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.2);color:var(--gold);font-family:var(--font-mono);font-size:10px;align-self:center;border-radius:6px;padding:5px 14px;max-width:90%;text-align:center}
+.msg-time{font-size:9px;opacity:.6;margin-top:3px;font-family:var(--font-mono)}
+.msg-name{font-size:10px;font-weight:600;margin-bottom:3px;color:var(--gold);font-family:var(--font-mono)}
+.chat-input-area{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-shrink:0}
+.media-preview{max-width:200px;border-radius:8px;margin-top:4px;cursor:pointer}
+.claim-banner{background:rgba(240,165,0,.1);border:1px solid rgba(240,165,0,.3);padding:8px 14px;font-size:12px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+
+/* ══════════════════════════════════════════════════════════
+   CIVILIAN PORTAL
+══════════════════════════════════════════════════════════ */
+#civilian-shell{min-height:100vh;background:#f0f4f8;color:#1a1a2e;font-family:var(--font-body)}
+.civ-nav{background:#fff;border-bottom:2px solid #e0e0e0;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.civ-logo{display:flex;align-items:center;gap:10px}
+.civ-logo-icon{width:36px;height:36px;background:#1565C0;color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:20px;font-weight:700}
+.civ-logo-text{font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:2px;color:#1565C0}
+.civ-nav-links{display:flex;gap:4px}
+.civ-nav-btn{padding:8px 16px;border-radius:6px;border:none;background:transparent;color:#555;font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.civ-nav-btn:hover,.civ-nav-btn.active{background:#e3f2fd;color:#1565C0}
+.civ-content{max-width:1100px;margin:0 auto;padding:24px}
+.civ-hero{background:linear-gradient(135deg,#1565C0,#0288D1);color:#fff;border-radius:14px;padding:36px 40px;margin-bottom:24px;position:relative;overflow:hidden}
+.civ-hero h1{font-family:var(--font-display);font-size:28px;font-weight:700;letter-spacing:2px;margin-bottom:8px}
+.civ-hero p{opacity:.85;font-size:14px;line-height:1.6;max-width:500px}
+.civ-card{background:#fff;border:1px solid #e0e0e0;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.civ-card-title{font-family:var(--font-display);font-size:15px;font-weight:700;letter-spacing:1px;color:#1565C0;margin-bottom:12px}
+.civ-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:7px;font-family:var(--font-display);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;transition:all .15s}
+.civ-btn-primary{background:#1565C0;color:#fff}.civ-btn-primary:hover{background:#1976D2}
+.civ-btn-accent{background:#0288D1;color:#fff}.civ-btn-accent:hover{background:#0299E0}
+.civ-btn-ghost{background:transparent;color:#1565C0;border:1.5px solid #1565C0}.civ-btn-ghost:hover{background:#e3f2fd}
+.civ-btn-red{background:#e53935;color:#fff}
+.civ-input{background:#f5f7fa;border:1.5px solid #e0e0e0;border-radius:7px;padding:10px 14px;color:#1a1a2e;font-size:13px;outline:none;transition:border-color .15s;width:100%}
+.civ-input:focus{border-color:#1565C0}
+.civ-chat-bubble{max-width:65%;padding:10px 14px;border-radius:18px;font-size:13px;line-height:1.5;word-break:break-word;margin-bottom:2px}
+.civ-chat-sent{background:#1565C0;color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.civ-chat-recv{background:#e3f2fd;color:#1a1a2e;border-bottom-left-radius:4px;align-self:flex-start}
+.civ-chat-system{background:#fff3e0;border:1px solid #ffcc80;color:#e65100;font-size:11px;font-family:var(--font-mono);align-self:center;border-radius:6px;padding:5px 14px;max-width:90%;text-align:center}
+.media-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.media-thumb{width:100%;height:80px;object-fit:cover;border-radius:6px;cursor:pointer}
+
+/* ══════════════════════════════════════════════════════════
+   REGISTRATION
+══════════════════════════════════════════════════════════ */
+.reg-steps{display:flex;gap:0;margin-bottom:24px}
+.reg-step{flex:1;padding:8px;text-align:center;font-family:var(--font-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--gray-2);border-bottom:2px solid var(--border);position:relative}
+.reg-step.done{color:var(--green);border-color:var(--green)}
+.reg-step.active{color:var(--gold);border-color:var(--gold)}
+.photo-upload{width:100px;height:100px;border-radius:50%;border:2px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;margin:0 auto 16px;overflow:hidden;position:relative}
+.photo-upload img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.photo-upload:hover{border-color:var(--accent)}
+
+/* ══════════════════════════════════════════════════════════
+   TRACKING MAP
+══════════════════════════════════════════════════════════ */
+.track-map{position:relative;height:380px;background:linear-gradient(135deg,#061828 0%,#0d2240 50%,#061828 100%);border-radius:8px;overflow:hidden}
+.map-grid-h,.map-grid-v{position:absolute;background:rgba(46,109,180,.08)}
+.map-grid-h{left:0;right:0;height:1px}.map-grid-v{top:0;bottom:0;width:1px}
+.officer-dot{position:absolute;transform:translate(-50%,-50%);cursor:pointer;transition:left 1.5s ease,top 1.5s ease;z-index:10}
+.officer-dot-inner{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;font-family:var(--font-display);border:2px solid rgba(255,255,255,.3);transition:all .2s}
+.officer-dot.sos .officer-dot-inner{background:var(--red)!important;animation:pulse 1s ease infinite}
+.sos-ring{position:absolute;width:40px;height:40px;border:2px solid var(--red);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);animation:pulse 1s ease infinite}
+.officer-tooltip{position:absolute;left:50%;top:110%;transform:translateX(-50%);background:var(--navy-2);border:1px solid var(--border);border-radius:4px;padding:4px 10px;font-family:var(--font-mono);font-size:9px;white-space:nowrap;z-index:20;pointer-events:none}
+
+/* ══════════════════════════════════════════════════════════
+   INVESTIGATION GRAPH
+══════════════════════════════════════════════════════════ */
+.graph-svg{width:100%;border-radius:0 0 8px 8px}
+
+/* ══════════════════════════════════════════════════════════
+   COMMAND / TASK
+══════════════════════════════════════════════════════════ */
+.task-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--navy-3);border-radius:6px;margin-bottom:7px;border-left:3px solid var(--accent)}
+.task-row.critical{border-left-color:var(--red)}
+.task-row.high{border-left-color:var(--orange)}
+.task-row.normal{border-left-color:var(--green)}
+
+/* ══════════════════════════════════════════════════════════
+   ALERT BELL
+══════════════════════════════════════════════════════════ */
+.alert-bell{position:relative;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--navy-3);border:1px solid var(--border);cursor:pointer;transition:all .15s}
+.alert-bell:hover{background:var(--navy-2)}
+.alert-count{position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:var(--red);border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-mono)}
+
+/* PROGRESS BAR */
+.progress-bar{height:4px;background:var(--navy-3);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;transition:width .5s ease}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LOGIN ══════════════ -->
+<div id="login-screen">
+  <div class="login-box fade-in">
+    <div class="login-logo">
+      <div class="login-logo-icon">P</div>
+      <div class="login-logo-text">POLICETECH PRO</div>
+      <div class="login-logo-sub">INTEGRATED LAW ENFORCEMENT SYSTEM</div>
+    </div>
+    <!-- Portal Tabs -->
+    <div class="portal-tabs">
+      <button class="portal-tab active" onclick="selectPortal('supervisor')" id="tab-supervisor">
+        <span class="tab-icon">🛡</span><span>Supervisor</span>
+      </button>
+      <button class="portal-tab" onclick="selectPortal('officer')" id="tab-officer">
+        <span class="tab-icon">👮</span><span>Officer</span>
+      </button>
+      <button class="portal-tab" onclick="selectPortal('civilian')" id="tab-civilian">
+        <span class="tab-icon">👤</span><span>Civilian</span>
+      </button>
+    </div>
+    <div id="login-error" class="login-error">Invalid credentials. Try again.</div>
+    <div class="form-group">
+      <label class="form-label">Username / ID</label>
+      <input class="input" id="login-user" placeholder="Enter your ID or username" type="text"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="input" id="login-pass" placeholder="Enter password" type="password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:6px;padding:11px" onclick="doLogin()">
+      LOGIN →
+    </button>
+    <div style="text-align:center;margin-top:16px">
+      <button onclick="showRegister()" style="background:none;border:none;color:var(--accent-light);font-size:12px;cursor:pointer;font-family:var(--font-mono);letter-spacing:1px">
+        NEW USER? CREATE ACCOUNT
+      </button>
+    </div>
+    <div style="text-align:center;margin-top:8px;font-family:var(--font-mono);font-size:9px;color:var(--gray-2)">
+      DEMO: supervisor/admin123 · officer1/pass123 · civilian1/pass123
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ REGISTRATION MODAL ══════════════ -->
+<div id="reg-modal" class="modal-overlay hidden">
+  <div class="modal" style="min-width:500px">
+    <div class="modal-title">📋 NEW USER REGISTRATION</div>
+    <div class="reg-steps" id="reg-steps">
+      <div class="reg-step active" id="rs1">01 · Personal</div>
+      <div class="reg-step" id="rs2">02 · ID & Docs</div>
+      <div class="reg-step" id="rs3">03 · Account</div>
+    </div>
+    <!-- Step 1 -->
+    <div id="reg-step1">
+      <div style="text-align:center;margin-bottom:16px">
+        <div class="photo-upload" id="photo-upload-btn" onclick="document.getElementById('photo-file').click()">
+          <img id="photo-preview" src="" alt="" style="display:none"/>
+          <span id="photo-placeholder" style="font-size:28px;margin-bottom:4px">📷</span>
+          <span style="font-size:9px;color:var(--gray-1);font-family:var(--font-mono)">UPLOAD PHOTO</span>
+        </div>
+        <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="previewPhoto(this)"/>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">Full Name *</label><input class="input" id="r-name" placeholder="e.g. Jean Paul Habimana"/></div>
+        <div class="form-group"><label class="form-label">Date of Birth *</label><input class="input" id="r-dob" type="date"/></div>
+        <div class="form-group"><label class="form-label">Height (cm) *</label><input class="input" id="r-height" placeholder="e.g. 175" type="number"/></div>
+        <div class="form-group"><label class="form-label">Gender *</label>
+          <select class="input" id="r-gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Address / Road *</label><input class="input" id="r-address" placeholder="e.g. KN 7 Ave, Kigali, Rwanda"/></div>
+      <div class="flex-row" style="justify-content:flex-end;margin-top:12px">
+        <button class="btn btn-ghost btn-sm" onclick="closeRegister()">Cancel</button>
+        <button class="btn btn-primary btn-sm" onclick="regNext(2)">Next →</button>
+      </div>
+    </div>
+    <!-- Step 2 -->
+    <div id="reg-step2" class="hidden">
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">National ID *</label><input class="input" id="r-nid" placeholder="16-digit NID"/></div>
+        <div class="form-group"><label class="form-label">Passport Number *</label><input class="input" id="r-passport" placeholder="e.g. PR1234567"/></div>
+        <div class="form-group"><label class="form-label">Phone Number</label><input class="input" id="r-phone" placeholder="+250 7XX XXX XXX"/></div>
+        <div class="form-group"><label class="form-label">Nationality</label><input class="input" id="r-nationality" value="Rwandan"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Emergency Contact</label><input class="input" id="r-emergency" placeholder="Name · Phone"/></div>
+      <div class="flex-row" style="justify-content:flex-end;margin-top:12px">
+        <button class="btn btn-ghost btn-sm" onclick="regNext(1)">← Back</button>
+        <button class="btn btn-primary btn-sm" onclick="regNext(3)">Next →</button>
+      </div>
+    </div>
+    <!-- Step 3 -->
+    <div id="reg-step3" class="hidden">
+      <div class="form-group"><label class="form-label">Portal Role</label>
+        <select class="input" id="r-role">
+          <option value="civilian">Civilian</option>
+          <option value="officer">Officer (requires supervisor approval)</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Username *</label><input class="input" id="r-username" placeholder="Choose a unique username"/></div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">Password *</label><input class="input" id="r-password" type="password" placeholder="Min 6 chars"/></div>
+        <div class="form-group"><label class="form-label">Confirm Password *</label><input class="input" id="r-confirm" type="password" placeholder="Repeat password"/></div>
+      </div>
+      <div id="reg-error" style="display:none;color:var(--red);font-size:12px;margin-bottom:10px"></div>
+      <div class="flex-row" style="justify-content:flex-end;margin-top:12px">
+        <button class="btn btn-ghost btn-sm" onclick="regNext(2)">← Back</button>
+        <button class="btn btn-gold btn-sm" onclick="submitRegistration()">✓ REGISTER</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SUPERVISOR / OFFICER APP ══════════════ -->
+<div id="app-shell" class="hidden">
+  <aside class="sidebar" id="main-sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">P</div>
+      <div>
+        <div class="sidebar-logo-text">POLICE</div>
+        <div class="sidebar-logo-sub">TECH PRO</div>
+      </div>
+    </div>
+    <div class="sidebar-status"><span class="live-dot"></span> SYSTEM LIVE</div>
+    <nav class="sidebar-nav" id="sidebar-nav"></nav>
+    <div class="sidebar-footer">
+      <div class="officer-card">
+        <div class="officer-avatar" id="sb-avatar"></div>
+        <div>
+          <div style="font-size:12px;font-weight:600" id="sb-name"></div>
+          <div style="font-size:9px;color:var(--gray-2);font-family:var(--font-mono)" id="sb-role"></div>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-sm" style="width:100%;justify-content:center" onclick="logout()">LOGOUT</button>
+    </div>
+  </aside>
+  <main class="main-content" id="main-content"></main>
+</div>
+
+<!-- ══════════════ CIVILIAN APP ══════════════ -->
+<div id="civilian-shell" class="hidden">
+  <nav class="civ-nav">
+    <div class="civ-logo">
+      <div class="civ-logo-icon">P</div>
+      <div class="civ-logo-text">POLICETECH</div>
+    </div>
+    <div class="civ-nav-links">
+      <button class="civ-nav-btn active" onclick="civPage('home')" id="civ-tab-home">🏠 Home</button>
+      <button class="civ-nav-btn" onclick="civPage('media')" id="civ-tab-media">📢 Media</button>
+      <button class="civ-nav-btn" onclick="civPage('report')" id="civ-tab-report">🚨 Report</button>
+      <button class="civ-nav-btn" onclick="civPage('helpline')" id="civ-tab-helpline">💬 Helpline</button>
+    </div>
+    <div class="flex-row">
+      <div style="font-size:12px;color:#555" id="civ-user-label"></div>
+      <button class="civ-btn civ-btn-ghost" style="padding:6px 14px;font-size:11px" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+  <div class="civ-content" id="civ-content"></div>
+</div>
+
+<!-- ══════════════ TOAST ══════════════ -->
+<div id="global-toast" class="toast hidden"></div>
+
+<!-- ══════════════ GENERIC MODAL ══════════════ -->
+<div id="generic-modal" class="modal-overlay hidden">
+  <div class="modal" id="generic-modal-inner"></div>
+</div>
+
+<script>
+// ╔══════════════════════════════════════════════════════════════╗
+// ║                    DATABASE (localStorage)                    ║
+// ╚══════════════════════════════════════════════════════════════╝
+const DB = {
+  get(k){ try{return JSON.parse(localStorage.getItem('ptpro_'+k)||'null')}catch{return null} },
+  set(k,v){ localStorage.setItem('ptpro_'+k, JSON.stringify(v)) },
+  push(k,item){ const a=DB.get(k)||[]; a.push(item); DB.set(k,a); return item },
+  update(k,id,patch){ const a=DB.get(k)||[]; const i=a.findIndex(x=>x.id===id); if(i>=0){a[i]={...a[i],...patch};DB.set(k,a);return a[i]}return null },
+  delete(k,id){ const a=(DB.get(k)||[]).filter(x=>x.id!==id); DB.set(k,a) },
+  find(k,id){ return (DB.get(k)||[]).find(x=>x.id===id) },
+  genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6) },
+  now(){ return new Date().toISOString() },
+  timeStr(){ return new Date().toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit',hour12:false}) },
+  dateStr(){ return new Date().toLocaleDateString('en-GB') },
+};
+
+// Seed default data on first load
+function seedDB(){
+  if(DB.get('seeded')) return;
+  // Users
+  DB.set('users',[
+    {id:'u1',username:'supervisor',password:'admin123',role:'supervisor',name:'Supt. James Kagabo',nid:'119800101234567',dob:'1980-01-01',height:180,gender:'Male',address:'KN 1 Ave, Kigali',phone:'+250788000001',nationality:'Rwandan',passport:'PS0000001',photo:'',approved:true,createdAt:DB.now()},
+    {id:'u2',username:'officer1',password:'pass123',role:'officer',name:'Insp. Alice Uwase',nid:'119900202345678',dob:'1990-02-02',height:165,gender:'Female',address:'KG 11 Ave, Kigali',phone:'+250788000002',nationality:'Rwandan',passport:'PO0000002',photo:'',approved:true,createdAt:DB.now()},
+    {id:'u3',username:'officer2',password:'pass123',role:'officer',name:'Sgt. Patrick Habimana',nid:'119920303456789',dob:'1992-03-03',height:175,gender:'Male',address:'KN 5 Ave, Kigali',phone:'+250788000003',nationality:'Rwandan',passport:'PO0000003',photo:'',approved:true,createdAt:DB.now()},
+    {id:'u4',username:'civilian1',password:'pass123',role:'civilian',name:'Marie Nkurunziza',nid:'199501011234567',dob:'1995-01-01',height:160,gender:'Female',address:'KK 15 Ave, Kigali',phone:'+250788000004',nationality:'Rwandan',passport:'PC0000004',photo:'',approved:true,createdAt:DB.now()},
+    {id:'u5',username:'civilian2',password:'pass123',role:'civilian',name:'Eric Bizimana',nid:'199801011234567',dob:'1998-01-01',height:172,gender:'Male',address:'KG 7 Ave, Kigali',phone:'+250788000005',nationality:'Rwandan',passport:'PC0000005',photo:'',approved:true,createdAt:DB.now()},
+  ]);
+  // Chats (helpline)
+  DB.set('chats',[
+    {id:'c1',civilianId:'u4',civilianName:'Marie Nkurunziza',officerId:null,status:'pending',lastMsg:'I need help, someone broke into my house!',lastTime:'22:10',unread:1,createdAt:DB.now()},
+    {id:'c2',civilianId:'u5',civilianName:'Eric Bizimana',officerId:'u2',status:'active',lastMsg:'Thank you officer, they left.',lastTime:'21:45',unread:0,createdAt:DB.now()},
+  ]);
+  // Messages
+  DB.set('messages',[
+    {id:'m1',chatId:'c1',senderId:'u4',senderName:'Marie Nkurunziza',text:'I need help, someone broke into my house!',type:'text',time:'22:10',createdAt:DB.now()},
+    {id:'m2',chatId:'c2',senderId:'u5',senderName:'Eric Bizimana',text:'Someone is following me on KN 7 Ave.',type:'text',time:'21:40',createdAt:DB.now()},
+    {id:'m3',chatId:'c2',senderId:'u2',senderName:'Insp. Alice Uwase',text:'We have dispatched officers to your location. Stay calm.',type:'text',time:'21:43',createdAt:DB.now()},
+    {id:'m4',chatId:'c2',senderId:'u5',senderName:'Eric Bizimana',text:'Thank you officer, they left.',type:'text',time:'21:45',createdAt:DB.now()},
+  ]);
+  // Criminal Records
+  DB.set('records',[
+    {id:'r1',name:'Jean Habonimana',photo:'JH',dob:'1989-03-14',nid:'119890301234567',nationality:'Rwandan',passport:'PR1234567',address:'Nyabugogo, Kigali',height:178,gender:'Male',status:'warrant',risk:'High',offences:['Robbery 2022','Assault 2020'],cases:['RW-2025-001'],convictions:2,unit:'CID',addedBy:'u2',createdAt:DB.now()},
+    {id:'r2',name:'Alice Muhire',photo:'AM',dob:'1991-11-05',nid:'119911101456789',nationality:'Rwandan',passport:'PR2345678',address:'Kimisagara, Kigali',height:163,gender:'Female',status:'in-custody',risk:'Medium',offences:['Fraud 2023','Forgery 2022'],cases:['RW-2024-881'],convictions:2,unit:'CID',addedBy:'u2',createdAt:DB.now()},
+    {id:'r3',name:'Pascal Irakoze',photo:'PI',dob:'1985-01-30',nid:'119850130567890',nationality:'Rwandan',passport:'PR3456789',address:'KN 14 Ave, Kigali',height:170,gender:'Male',status:'released',risk:'Low',offences:['Theft 2020'],cases:['RW-2020-312'],convictions:1,unit:'Patrol',addedBy:'u3',createdAt:DB.now()},
+  ]);
+  // Tasks
+  DB.set('tasks',[
+    {id:'t1',title:'Secure Northern Perimeter',unit:'Unit Alpha',priority:'critical',status:'in-progress',due:'18:00',assignedTo:'u2',description:'Maintain security around northern checkpoint.',createdBy:'u1',createdAt:DB.now()},
+    {id:'t2',title:'VIP Escort — Minister Kagabo',unit:'Unit Bravo',priority:'high',status:'pending',due:'20:30',assignedTo:'u3',description:'Escort VIP from Serena Hotel to Parliament.',createdBy:'u1',createdAt:DB.now()},
+    {id:'t3',title:'Night Patrol Briefing',unit:'All Units',priority:'normal',status:'completed',due:'22:00',assignedTo:'u2',description:'Conduct night shift briefing.',createdBy:'u1',createdAt:DB.now()},
+  ]);
+  // VIPs
+  DB.set('vips',[
+    {id:'v1',name:'Min. Jean-Claude Kagabo',title:'Minister of Finance',risk:'High',status:'Active',officers:6,protocol:'Alpha-1',badge:'STATE',nextMovement:'Today 20:30',notes:'Requires 3 vehicle convoy.'},
+    {id:'v2',name:'Ambassador Marie Uwimana',title:'EU Ambassador',risk:'Medium',status:'Scheduled',officers:4,protocol:'Beta-2',badge:'DIPLOMAT',nextMovement:'Tomorrow 09:00',notes:'Diplomatic immunity active.'},
+  ]);
+  // Media posts (civilian page)
+  DB.set('media',[
+    {id:'p1',title:'Community Safety Week 2025',body:'Join us for the annual community safety awareness week. Activities include crime prevention workshops and neighborhood watch setup.',date:'2025-01-20',category:'Announcement',img:''},
+    {id:'p2',title:'New Traffic Enforcement Measures',body:'Starting February 2025, stricter traffic enforcement will be in effect across Kigali. Please ensure your vehicle documents are up to date.',date:'2025-01-18',category:'Notice',img:''},
+    {id:'p3',title:'Phone Recovery Service Launched',body:'Citizens can now report stolen phones through PoliceTech Pro. Our GPS tracking system will assist in recovery.',date:'2025-01-15',category:'Service',img:''},
+  ]);
+  // Crime reports (civilian submitted)
+  DB.set('reports',[]);
+  // Pending approvals
+  DB.set('pending_users',[]);
+  DB.set('seeded',true);
+}
+seedDB();
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║                         AUTH STATE                            ║
+// ╚══════════════════════════════════════════════════════════════╝
+let currentUser = null;
+let currentPortal = 'supervisor';
+
+function selectPortal(p){
+  currentPortal=p;
+  ['supervisor','officer','civilian'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.toggle('active',t===p);
+  });
+}
+
+function doLogin(){
+  const u=document.getElementById('login-user').value.trim();
+  const p=document.getElementById('login-pass').value.trim();
+  const err=document.getElementById('login-error');
+  if(!u||!p){err.classList.add('show');err.textContent='Please enter username and password.';return;}
+  const users=DB.get('users')||[];
+  const user=users.find(x=>x.username===u&&x.password===p);
+  if(!user){err.classList.add('show');err.textContent='Invalid credentials. Try again.';return;}
+  if(!user.approved){err.classList.add('show');err.textContent='Account pending supervisor approval.';return;}
+  if(user.role!==currentPortal && !(user.role==='supervisor')){
+    err.classList.add('show');err.textContent=`This account is for the ${user.role} portal.`;return;
+  }
+  err.classList.remove('show');
+  currentUser=user;
+  launchApp();
+}
+
+function logout(){
+  currentUser=null;
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('app-shell').classList.add('hidden');
+  document.getElementById('civilian-shell').classList.add('hidden');
+  document.getElementById('login-user').value='';
+  document.getElementById('login-pass').value='';
+}
+
+function launchApp(){
+  document.getElementById('login-screen').classList.add('hidden');
+  if(currentUser.role==='civilian'){
+    launchCivilianApp();
+  } else {
+    launchOfficerApp();
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  REGISTRATION
+// ══════════════════════════════════════════════════════════════
+let regPhotoData='';
+function showRegister(){ document.getElementById('reg-modal').classList.remove('hidden'); regNext(1); }
+function closeRegister(){ document.getElementById('reg-modal').classList.add('hidden'); }
+function previewPhoto(inp){
+  const f=inp.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    regPhotoData=e.target.result;
+    const img=document.getElementById('photo-preview');
+    img.src=regPhotoData; img.style.display='block';
+    document.getElementById('photo-placeholder').style.display='none';
+  };
+  r.readAsDataURL(f);
+}
+function regNext(step){
+  [1,2,3].forEach(s=>{
+    document.getElementById('reg-step'+s).classList.toggle('hidden',s!==step);
+    const el=document.getElementById('rs'+s);
+    el.classList.toggle('active',s===step);
+    el.classList.toggle('done',s<step);
+  });
+}
+function submitRegistration(){
+  const name=document.getElementById('r-name').value.trim();
+  const dob=document.getElementById('r-dob').value;
+  const height=document.getElementById('r-height').value;
+  const gender=document.getElementById('r-gender').value;
+  const address=document.getElementById('r-address').value.trim();
+  const nid=document.getElementById('r-nid').value.trim();
+  const passport=document.getElementById('r-passport').value.trim();
+  const phone=document.getElementById('r-phone').value.trim();
+  const nationality=document.getElementById('r-nationality').value.trim();
+  const emergency=document.getElementById('r-emergency').value.trim();
+  const role=document.getElementById('r-role').value;
+  const username=document.getElementById('r-username').value.trim();
+  const pass=document.getElementById('r-password').value;
+  const confirm=document.getElementById('r-confirm').value;
+  const errEl=document.getElementById('reg-error');
+  if(!name||!dob||!height||!gender||!address||!nid||!passport||!username||!pass){
+    errEl.style.display='block';errEl.textContent='Please fill all required fields.';return;
+  }
+  if(pass!==confirm){errEl.style.display='block';errEl.textContent='Passwords do not match.';return;}
+  if(pass.length<6){errEl.style.display='block';errEl.textContent='Password must be at least 6 characters.';return;}
+  const users=DB.get('users')||[];
+  if(users.find(x=>x.username===username)){errEl.style.display='block';errEl.textContent='Username already taken.';return;}
+  const newUser={
+    id:DB.genId(),username,password:pass,role,name,dob,height:+height,gender,address,nid,passport,phone,nationality,emergency,
+    photo:regPhotoData,approved:role==='civilian',createdAt:DB.now()
+  };
+  if(role==='officer'){
+    DB.push('pending_users',newUser);
+    closeRegister();
+    showToast('Registration submitted! Awaiting supervisor approval.','gold');
+  } else {
+    DB.push('users',newUser);
+    closeRegister();
+    showToast('Account created! You can now log in.','green');
+  }
+  errEl.style.display='none';
+  regPhotoData='';
+}
+
+// ══════════════════════════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════════════════════════
+let toastTimer=null;
+function showToast(msg,type='green'){
+  const t=document.getElementById('global-toast');
+  t.textContent=(type==='green'?'✓ ':type==='red'?'✗ ':'⚡ ')+msg;
+  t.style.borderColor=type==='green'?'var(--green)':type==='red'?'var(--red)':'var(--gold)';
+  t.style.color=type==='green'?'var(--green)':type==='red'?'var(--red)':'var(--gold)';
+  t.classList.remove('hidden');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.add('hidden'),3500);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  GENERIC MODAL
+// ══════════════════════════════════════════════════════════════
+function showModal(html){
+  document.getElementById('generic-modal-inner').innerHTML=html;
+  document.getElementById('generic-modal').classList.remove('hidden');
+}
+function closeModal(){ document.getElementById('generic-modal').classList.add('hidden'); }
+
+// ══════════════════════════════════════════════════════════════
+//  OFFICER / SUPERVISOR APP
+// ══════════════════════════════════════════════════════════════
+const OFFICER_NAV=[
+  {id:'dashboard',icon:'⬡',label:'Command Center'},
+  {id:'helpline',icon:'💬',label:'Helpline Chat',badge:true},
+  {id:'tracking',icon:'⊕',label:'GPS Tracking'},
+  {id:'records',icon:'▦',label:'Criminal Records'},
+  {id:'investigation',icon:'🕸',label:'CrimeNet'},
+  {id:'vip',icon:'◆',label:'VIP Management'},
+  {id:'evidence',icon:'📹',label:'Evidence & Media'},
+];
+const SUPERVISOR_EXTRA=[
+  {id:'users',icon:'👥',label:'User Management'},
+  {id:'approvals',icon:'✅',label:'Approvals'},
+  {id:'admin',icon:'⚙',label:'System Admin'},
+];
+let currentPage='dashboard';
+let activeChatId=null;
+
+function launchOfficerApp(){
+  const shell=document.getElementById('app-shell');
+  shell.classList.remove('hidden');
+  // Sidebar user info
+  const av=document.getElementById('sb-avatar');
+  if(currentUser.photo){av.innerHTML=`<img src="${currentUser.photo}" alt=""/>`;}
+  else{av.textContent=currentUser.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+  document.getElementById('sb-name').textContent=currentUser.name;
+  document.getElementById('sb-role').textContent=currentUser.role.toUpperCase();
+  buildSidebar();
+  navigate('dashboard');
+}
+function buildSidebar(){
+  const nav=document.getElementById('sidebar-nav');
+  nav.innerHTML='';
+  const items=currentUser.role==='supervisor'?[...OFFICER_NAV,...SUPERVISOR_EXTRA]:OFFICER_NAV;
+  items.forEach(item=>{
+    const pending=item.badge?getPendingChatCount():0;
+    nav.innerHTML+=`<button class="nav-item${currentPage===item.id?' active':''}" onclick="navigate('${item.id}')" id="nav-${item.id}">
+      <span class="nav-icon">${item.icon}</span>
+      <span>${item.label}</span>
+      ${pending>0?`<span class="nav-badge">${pending}</span>`:''}
+      ${currentPage===item.id?'<div class="nav-active-bar"></div>':''}
+    </button>`;
+  });
+}
+function navigate(page){
+  currentPage=page;
+  buildSidebar();
+  const mc=document.getElementById('main-content');
+  mc.innerHTML='<div style="padding:24px"><div style="font-family:var(--font-mono);color:var(--gray-2);font-size:12px;letter-spacing:2px;text-align:center;margin-top:60px">LOADING MODULE...</div></div>';
+  setTimeout(()=>{
+    switch(page){
+      case 'dashboard':   mc.innerHTML=renderDashboard(); break;
+      case 'helpline':    mc.innerHTML=''; mc.appendChild(buildHelpline()); break;
+      case 'tracking':    mc.innerHTML=renderTracking(); startTracking(); break;
+      case 'records':     mc.innerHTML=renderRecords(); break;
+      case 'investigation': mc.innerHTML=renderInvestigation(); break;
+      case 'vip':         mc.innerHTML=renderVIP(); break;
+      case 'evidence':    mc.innerHTML=renderEvidence(); break;
+      case 'users':       mc.innerHTML=renderUsers(); break;
+      case 'approvals':   mc.innerHTML=renderApprovals(); break;
+      case 'admin':       mc.innerHTML=renderAdmin(); break;
+    }
+  },80);
+}
+function getPendingChatCount(){
+  const chats=DB.get('chats')||[];
+  return chats.filter(c=>c.status==='pending').length;
+}
+
+// ──────────────────────────────────────────────────────────────
+//  DASHBOARD
+// ──────────────────────────────────────────────────────────────
+function renderDashboard(){
+  const tasks=DB.get('tasks')||[];
+  const chats=DB.get('chats')||[];
+  const records=DB.get('records')||[];
+  const myTasks=currentUser.role==='officer'?tasks.filter(t=>t.assignedTo===currentUser.id):tasks;
+  const active=myTasks.filter(t=>t.status==='in-progress').length;
+  const pending=myTasks.filter(t=>t.status==='pending').length;
+  const done=myTasks.filter(t=>t.status==='completed').length;
+  const pendingChats=chats.filter(c=>c.status==='pending').length;
+  return `<div class="page fade-in">
+    <div class="page-header">
+      <div><div class="page-title">⬡ Command <span>Center</span></div><div class="page-subtitle">MASTERING PROJECT MODULE · ${currentUser.name.toUpperCase()}</div></div>
+      <div class="flex-row"><span class="live-dot"></span><span style="font-family:var(--font-mono);font-size:11px;color:var(--green)">LIVE</span>
+      ${currentUser.role==='supervisor'?`<button class="btn btn-gold btn-sm" onclick="showAddTask()">+ NEW TASK</button>`:''}
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Active Tasks</div><div class="stat-value">${active}</div><div style="font-size:11px;color:var(--gray-1)">In progress</div></div>
+      <div class="stat-card gold"><div class="stat-label">Pending</div><div class="stat-value" style="color:var(--gold)">${pending}</div><div style="font-size:11px;color:var(--gray-1)">Awaiting</div></div>
+      <div class="stat-card green"><div class="stat-label">Completed</div><div class="stat-value" style="color:var(--green)">${done}</div><div style="font-size:11px;color:var(--gray-1)">Today</div></div>
+      <div class="stat-card red"><div class="stat-label">Pending Helpline</div><div class="stat-value" style="color:var(--red)">${pendingChats}</div><div style="font-size:11px;color:var(--gray-1)">Civilian requests</div></div>
+      <div class="stat-card"><div class="stat-label">Records DB</div><div class="stat-value">${records.length}</div><div style="font-size:11px;color:var(--gray-1)">Criminal records</div></div>
+    </div>
+    <div class="grid-2" style="align-items:start">
+      <div class="card">
+        <div class="card-header">MY TASKS${currentUser.role==='officer'?' (ASSIGNED TO YOU)':''}</div>
+        ${myTasks.length===0?'<div style="color:var(--gray-2);font-size:12px;text-align:center;padding:20px">No tasks assigned</div>':''}
+        ${myTasks.map(t=>`
+        <div class="task-row ${t.priority}">
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600;margin-bottom:2px">${t.title}</div>
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--gray-1)">${t.unit} · Due: ${t.due}</div>
+          </div>
+          <span class="badge ${t.status==='in-progress'?'badge-blue':t.status==='completed'?'badge-green':'badge-gold'}">${t.status.toUpperCase()}</span>
+          ${t.status!=='completed'?`<button class="btn btn-green btn-sm" onclick="completeTask('${t.id}')">Done</button>`:''}
+        </div>`).join('')}
+      </div>
+      <div class="card">
+        <div class="card-header">PENDING HELPLINE CHATS</div>
+        ${chats.filter(c=>c.status==='pending').map(c=>`
+        <div style="padding:10px 12px;background:var(--navy-3);border-radius:6px;border-left:3px solid var(--gold);margin-bottom:7px">
+          <div class="flex-between">
+            <div>
+              <div style="font-size:13px;font-weight:600">${c.civilianName}</div>
+              <div style="font-size:11px;color:var(--gray-1);margin-top:2px">${c.lastMsg}</div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="claimChat('${c.id}')">CLAIM</button>
+          </div>
+        </div>`).join('')||'<div style="color:var(--gray-2);font-size:12px;text-align:center;padding:20px">No pending chats</div>'}
+      </div>
+    </div>
+  </div>`;
+}
+function completeTask(id){
+  DB.update('tasks',id,{status:'completed'});
+  navigate('dashboard');
+  showToast('Task marked as completed!');
+}
+function claimChat(id){
+  DB.update('chats',id,{officerId:currentUser.id,status:'active'});
+  navigate('helpline');
+  showToast('Chat claimed! You can now respond.');
+}
+function showAddTask(){
+  const users=(DB.get('users')||[]).filter(u=>u.role==='officer'&&u.approved);
+  showModal(`<div class="modal-title">+ NEW TASK</div>
+    <div class="form-group"><label class="form-label">Title *</label><input class="input" id="nt-title" placeholder="Task title"/></div>
+    <div class="form-group"><label class="form-label">Description</label><textarea class="input" id="nt-desc" rows="3" placeholder="Details..."></textarea></div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Priority</label><select class="input" id="nt-pri"><option value="normal">Normal</option><option value="high">High</option><option value="critical">Critical</option></select></div>
+      <div class="form-group"><label class="form-label">Unit</label><input class="input" id="nt-unit" value="Unit Alpha"/></div>
+      <div class="form-group"><label class="form-label">Due Time</label><input class="input" id="nt-due" type="time"/></div>
+      <div class="form-group"><label class="form-label">Assign To</label><select class="input" id="nt-assign"><option value="">Unassigned</option>${users.map(u=>`<option value="${u.id}">${u.name}</option>`).join('')}</select></div>
+    </div>
+    <div class="flex-row" style="justify-content:flex-end;margin-top:12px">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-gold btn-sm" onclick="submitTask()">✓ ADD TASK</button>
+    </div>`);
+}
+function submitTask(){
+  const title=document.getElementById('nt-title').value.trim();
+  if(!title){showToast('Title is required','red');return;}
+  const due=document.getElementById('nt-due').value||'--:--';
+  DB.push('tasks',{id:DB.genId(),title,description:document.getElementById('nt-desc').value,priority:document.getElementById('nt-pri').value,unit:document.getElementById('nt-unit').value,due,assignedTo:document.getElementById('nt-assign').value,status:'pending',createdBy:currentUser.id,createdAt:DB.now()});
+  closeModal();navigate('dashboard');showToast('Task added and officers notified!');
+}
+
+// ──────────────────────────────────────────────────────────────
+//  HELPLINE CHAT (Instagram-style)
+// ──────────────────────────────────────────────────────────────
+function buildHelpline(){
+  const shell=document.createElement('div');
+  shell.className='chat-shell fade-in';
+  shell.id='helpline-shell';
+  renderChatList(shell);
+  return shell;
+}
+function renderChatList(shell){
+  const chats=DB.get('chats')||[];
+  const isSupervisor=currentUser.role==='supervisor';
+  const myClaims=isSupervisor?chats:chats.filter(c=>c.officerId===currentUser.id||c.status==='pending');
+  shell.innerHTML=`
+    <div class="chat-list-panel">
+      <div class="chat-list-header">
+        <div class="page-title" style="font-size:18px">💬 Help<span>line</span></div>
+        <div class="page-subtitle">CIVILIAN ASSISTANCE CHAT</div>
+      </div>
+      <div class="chat-list-search"><input class="input" placeholder="🔍 Search conversations..." oninput="filterChats(this.value)"/></div>
+      <div id="chat-list-items" style="flex:1;overflow-y:auto">
+        ${myClaims.map(c=>renderChatListItem(c)).join('')||'<div style="padding:20px;color:var(--gray-2);font-size:12px;text-align:center">No chats assigned</div>'}
+      </div>
+    </div>
+    <div class="chat-main" id="chat-main">
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:var(--gray-2)">
+        <div style="font-size:40px">💬</div>
+        <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:2px">SELECT A CONVERSATION</div>
+      </div>
+    </div>
+  `;
+  shell.querySelectorAll('.chat-item').forEach(el=>{
+    el.addEventListener('click',()=>openChat(el.dataset.id,shell));
+  });
+}
+function renderChatListItem(c){
+  const statusDot=c.status==='pending'?'var(--gold)':c.status==='active'?'var(--green)':'var(--gray-2)';
+  const initials=c.civilianName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  return `<div class="chat-item ${c.status==='pending'?'pending':'active-chat'}" data-id="${c.id}">
+    <div class="chat-avatar">${initials}<div class="chat-status-dot" style="background:${statusDot}"></div></div>
+    <div class="chat-info">
+      <div class="chat-name">${c.civilianName}</div>
+      <div class="chat-preview">${c.lastMsg||''}</div>
+    </div>
+    <div class="chat-meta">
+      <div class="chat-time">${c.lastTime||''}</div>
+      ${c.status==='pending'?'<span class="badge badge-gold">PENDING</span>':''}
+      ${c.unread>0?`<div class="unread-badge">${c.unread}</div>`:''}
+    </div>
+  </div>`;
+}
+function filterChats(q){
+  const chats=DB.get('chats')||[];
+  const filtered=q?chats.filter(c=>c.civilianName.toLowerCase().includes(q.toLowerCase())):chats;
+  const list=document.getElementById('chat-list-items');
+  if(list) list.innerHTML=filtered.map(c=>renderChatListItem(c)).join('');
+  list.querySelectorAll('.chat-item').forEach(el=>{
+    const shell=document.getElementById('helpline-shell');
+    el.addEventListener('click',()=>openChat(el.dataset.id,shell));
+  });
+}
+function openChat(chatId,shell){
+  activeChatId=chatId;
+  const chats=DB.get('chats')||[];
+  const chat=chats.find(c=>c.id===chatId);
+  if(!chat) return;
+  // Mark read
+  DB.update('chats',chatId,{unread:0});
+  const msgs=(DB.get('messages')||[]).filter(m=>m.chatId===chatId);
+  const isPending=chat.status==='pending';
+  const isMine=chat.officerId===currentUser.id;
+  const canReply=isMine||currentUser.role==='supervisor';
+  const main=document.getElementById('chat-main');
+  main.innerHTML=`
+    <div class="chat-header">
+      <div class="flex-row">
+        <div class="chat-avatar" style="width:38px;height:38px">${chat.civilianName.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+        <div>
+          <div style="font-weight:600;font-size:14px">${chat.civilianName}</div>
+          <div style="font-size:10px;color:var(--gray-1);font-family:var(--font-mono)">${isPending?'PENDING — NOT YET CLAIMED':isMine?'YOUR ACTIVE CHAT':'HANDLED BY: '+(chat.officerId||'Unknown')}</div>
+        </div>
+      </div>
+      <div class="flex-row">
+        ${isPending?`<button class="btn btn-gold btn-sm" onclick="claimChatInline('${chatId}')">CLAIM CHAT</button>`:''}
+        <span class="badge ${isPending?'badge-gold':chat.status==='active'?'badge-green':'badge-blue'}">${chat.status.toUpperCase()}</span>
+      </div>
+    </div>
+    ${isPending?`<div class="claim-banner"><span>⚡ This chat is pending. Claim it to start responding.</span><button class="btn btn-gold btn-sm" onclick="claimChatInline('${chatId}')">CLAIM</button></div>`:''}
+    <div class="messages-area scroll-y" id="msgs-area">
+      <div class="msg-bubble system-msg">📋 Chat started — ${chat.createdAt?new Date(chat.createdAt).toLocaleDateString():DB.dateStr()}</div>
+      ${msgs.map(m=>renderMsgBubble(m,chat)).join('')}
+    </div>
+    ${canReply&&!isPending?`
+    <div class="chat-input-area" id="reply-bar">
+      <button onclick="triggerMediaUpload()" style="width:36px;height:36px;background:var(--navy-3);border:1px solid var(--border);border-radius:6px;font-size:16px">📎</button>
+      <input type="file" id="media-inp" accept="image/*,video/*,audio/*" style="display:none" onchange="sendMedia(this)"/>
+      <input class="input" id="reply-inp" placeholder="Type a reply..." style="flex:1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendReply('${chatId}')}" />
+      <button class="btn btn-primary btn-sm" onclick="sendReply('${chatId}')">SEND</button>
+    </div>`:''}
+  `;
+  // Scroll to bottom
+  const area=document.getElementById('msgs-area');
+  if(area) setTimeout(()=>area.scrollTop=area.scrollHeight,50);
+}
+function renderMsgBubble(m,chat){
+  const isSelf=m.senderId===currentUser.id;
+  const isSystem=m.senderId==='system';
+  if(isSystem) return `<div class="msg-bubble system-msg">${m.text}</div>`;
+  const isOfficer=(DB.get('users')||[]).find(u=>u.id===m.senderId)?.role==='officer';
+  return `<div style="display:flex;flex-direction:column;align-items:${isSelf?'flex-end':'flex-start'};margin-bottom:6px">
+    ${!isSelf?`<div class="msg-name">${m.senderName}${isOfficer?' 👮':''}</div>`:''}
+    <div class="msg-bubble ${isSelf?'sent':'recv'}">
+      ${m.type==='image'?`<img src="${m.mediaUrl}" class="media-preview" onclick="window.open('${m.mediaUrl}')"/>`:''}
+      ${m.type==='video'?`<video src="${m.mediaUrl}" controls style="max-width:200px;border-radius:8px;margin-top:4px"></video>`:''}
+      ${m.type==='audio'?`<audio src="${m.mediaUrl}" controls style="max-width:200px"></audio>`:''}
+      ${m.text}
+    </div>
+    <div class="msg-time">${m.time}</div>
+  </div>`;
+}
+function claimChatInline(chatId){
+  DB.update('chats',chatId,{officerId:currentUser.id,status:'active'});
+  const shell=document.getElementById('helpline-shell');
+  if(shell){ renderChatList(shell); openChat(chatId,shell); }
+  showToast('Chat claimed! Responding now.');
+  buildSidebar();
+}
+function sendReply(chatId){
+  const inp=document.getElementById('reply-inp');
+  const text=inp?.value?.trim();
+  if(!text) return;
+  const msg={id:DB.genId(),chatId,senderId:currentUser.id,senderName:currentUser.name,text,type:'text',time:DB.timeStr(),createdAt:DB.now()};
+  DB.push('messages',msg);
+  DB.update('chats',chatId,{lastMsg:text,lastTime:DB.timeStr(),status:'active'});
+  inp.value='';
+  const area=document.getElementById('msgs-area');
+  if(area){
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;flex-direction:column;align-items:flex-end;margin-bottom:6px';
+    div.innerHTML=`<div class="msg-bubble sent">${text}</div><div class="msg-time">${DB.timeStr()}</div>`;
+    area.appendChild(div);
+    area.scrollTop=area.scrollHeight;
+  }
+}
+function triggerMediaUpload(){ document.getElementById('media-inp')?.click(); }
+function sendMedia(inp){
+  const f=inp.files[0]; if(!f||!activeChatId) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    const url=e.target.result;
+    const type=f.type.startsWith('image/')?'image':f.type.startsWith('video/')?'video':'audio';
+    const msg={id:DB.genId(),chatId:activeChatId,senderId:currentUser.id,senderName:currentUser.name,text:'',mediaUrl:url,type,time:DB.timeStr(),createdAt:DB.now()};
+    DB.push('messages',msg);
+    DB.update('chats',activeChatId,{lastMsg:'['+type.toUpperCase()+']',lastTime:DB.timeStr()});
+    const area=document.getElementById('msgs-area');
+    if(area){
+      const div=document.createElement('div');
+      div.style.cssText='display:flex;flex-direction:column;align-items:flex-end;margin-bottom:6px';
+      div.innerHTML=`<div class="msg-bubble sent">${type==='image'?`<img src="${url}" class="media-preview"/>`:type==='video'?`<video src="${url}" controls style="max-width:200px;border-radius:8px"></video>`:`<audio src="${url}" controls></audio>`}</div><div class="msg-time">${DB.timeStr()}</div>`;
+      area.appendChild(div);
+      area.scrollTop=area.scrollHeight;
+    }
+    showToast('Media shared!');
+  };
+  r.readAsDataURL(f);
+}
+
+// ──────────────────────────────────────────────────────────────
+//  GPS TRACKING
+// ──────────────────────────────────────────────────────────────
+const UNIT_COLORS={Alpha:'#2E6DB4',Bravo:'#f0a500',Charlie:'#00c97d',CID:'#f07030',Logistics:'#a8b8cc',Narcotics:'#e63b3b'};
+let officerPositions=[
+  {id:'o1',name:'Insp. Alice Uwase',unit:'Alpha',lat:52,lng:30,status:'on-duty',battery:87,zone:'KN 7 Ave'},
+  {id:'o2',name:'Sgt. Patrick Habimana',unit:'Charlie',lat:65,lng:55,status:'on-duty',battery:62,zone:'Kimisagara'},
+  {id:'o3',name:'Det. Kayitesi',unit:'CID',lat:38,lng:70,status:'on-duty',battery:44,zone:'Nyabugogo'},
+  {id:'o4',name:'Cst. Nkurunziza',unit:'Bravo',lat:75,lng:40,status:'standby',battery:91,zone:'Parliament'},
+  {id:'o5',name:'EMERGENCY!',unit:'Narcotics',lat:25,lng:60,status:'sos',battery:18,zone:'Unknown'},
+];
+let trackInterval=null;
+const SHORTCUTS=[
+  {icon:'🚨',label:'Request Backup',color:'var(--red)',action:'backup'},
+  {icon:'📝',label:'File Report',color:'var(--accent)',action:'report'},
+  {icon:'🔍',label:'Record Lookup',color:'var(--gold)',action:'lookup'},
+  {icon:'📢',label:'Broadcast Alert',color:'var(--orange)',action:'alert'},
+  {icon:'✅',label:'Check In',color:'var(--green)',action:'checkin'},
+  {icon:'🏥',label:'Medical SOS',color:'var(--red)',action:'sos'},
+];
+function renderTracking(){
+  return `<div class="page fade-in">
+    <div class="page-header">
+      <div><div class="page-title">⊕ GPS <span>Tracking</span></div><div class="page-subtitle">REAL-TIME OFFICER LOCATIONS · SMART SHORTCUTS</div></div>
+      <div class="flex-row"><span class="live-dot"></span><span style="font-family:var(--font-mono);font-size:11px;color:var(--green)" id="tracked-count">${officerPositions.length} TRACKED</span></div>
+    </div>
+    <div class="grid-2" style="align-items:start">
+      <div>
+        <div class="track-map card" style="padding:0;border-radius:8px" id="track-map">
+          ${officerPositions.map((o,i)=>`
+          <div class="officer-dot${o.status==='sos'?' sos':''}" id="dot-${o.id}" style="left:${o.lng}%;top:${o.lat}%" onclick="selectOfficer('${o.id}')">
+            ${o.status==='sos'?'<div class="sos-ring"></div>':''}
+            <div class="officer-dot-inner" style="background:${o.status==='sos'?'var(--red)':UNIT_COLORS[o.unit]||'var(--accent)'}">
+              ${o.name[0]}
+            </div>
+            <div class="officer-tooltip" style="display:none" id="tip-${o.id}">${o.name}</div>
+          </div>`).join('')}
+          <div style="position:absolute;top:10px;left:12px;font-family:var(--font-mono);font-size:9px;color:var(--accent-light);letter-spacing:1px">LIVE MAP · KIGALI</div>
+          ${officerPositions.some(o=>o.status==='sos')?`<div style="position:absolute;bottom:10px;left:12px;background:rgba(230,59,59,.15);border:1px solid rgba(230,59,59,.4);border-radius:4px;padding:4px 10px;font-family:var(--font-mono);font-size:9px;color:var(--red);animation:pulse 1s ease infinite">⚠ SOS ACTIVE</div>`:''}
+        </div>
+        <div class="card" style="margin-top:14px">
+          <div class="card-header">QUICK SHORTCUTS</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+            ${SHORTCUTS.map(sc=>`<button onclick="fireShortcut('${sc.action}')" style="padding:12px 6px;background:var(--navy-3);border:1px solid var(--border);border-radius:6px;display:flex;flex-direction:column;align-items:center;gap:5px;transition:all .15s" onmouseover="this.style.borderColor='${sc.color}'" onmouseout="this.style.borderColor='var(--border)'">
+              <span style="font-size:20px">${sc.icon}</span>
+              <span style="font-family:var(--font-mono);font-size:8px;color:${sc.color};text-transform:uppercase;letter-spacing:.5px;text-align:center;line-height:1.3">${sc.label}</span>
+            </button>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">OFFICER STATUS</div>
+        <div id="officer-list">
+          ${officerPositions.map(o=>renderOfficerRow(o)).join('')}
+        </div>
+        <hr class="divider"/>
+        <div class="card-header">PHONE EMERGENCY SHORTCUTS</div>
+        <div style="background:var(--navy-3);border-radius:6px;padding:14px;font-size:12px;color:var(--gray-1);line-height:1.8">
+          <div>📱 When a user sends <span style="color:var(--gold);font-family:var(--font-mono)">LOST PHONE</span> as emergency:</div>
+          <div style="margin:8px 0;padding:8px 12px;background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.2);border-radius:4px;font-family:var(--font-mono);font-size:10px;color:var(--gold)">
+            → Auto enables Low Power Mode<br>
+            → Switches on Mobile Data & WiFi<br>
+            → Sends GPS location every 60 seconds<br>
+            → Locks screen and displays police contact
+          </div>
+          <div>Contact app must be installed and emergency contact set.</div>
+        </div>
+        <div style="margin-top:14px">
+          <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="simulateLostPhone()">📱 SIMULATE LOST PHONE ALERT</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+function renderOfficerRow(o){
+  const col=o.status==='sos'?'var(--red)':o.status==='on-duty'?'var(--green)':'var(--gold)';
+  return `<div style="padding:9px 12px;background:${o.status==='sos'?'rgba(230,59,59,.1)':'var(--navy-3)'};border-radius:6px;border:1px solid ${o.status==='sos'?'rgba(230,59,59,.4)':'var(--border)'};margin-bottom:6px">
+    <div class="flex-between">
+      <div class="flex-row" style="gap:8px">
+        <div style="width:8px;height:8px;border-radius:50%;background:${col};${o.status==='sos'?'animation:pulse 1s ease infinite':''}"></div>
+        <div>
+          <div style="font-size:12px;font-weight:600">${o.name}</div>
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1)">${o.zone} · Unit ${o.unit}</div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <span class="badge ${o.status==='sos'?'badge-red':o.status==='on-duty'?'badge-green':'badge-gold'}">${o.status==='sos'?'⚠ SOS':o.status.toUpperCase()}</span>
+        <div style="font-family:var(--font-mono);font-size:9px;color:${o.battery<30?'var(--red)':'var(--gray-1)'};margin-top:3px">🔋 ${o.battery}%</div>
+      </div>
+    </div>
+  </div>`;
+}
+function startTracking(){
+  if(trackInterval) clearInterval(trackInterval);
+  trackInterval=setInterval(()=>{
+    officerPositions=officerPositions.map(o=>({...o,lat:Math.min(90,Math.max(10,o.lat+(Math.random()-.5)*2)),lng:Math.min(90,Math.max(10,o.lng+(Math.random()-.5)*2))}));
+    officerPositions.forEach(o=>{
+      const dot=document.getElementById('dot-'+o.id);
+      if(dot){dot.style.left=o.lng+'%';dot.style.top=o.lat+'%';}
+    });
+  },3000);
+}
+function selectOfficer(id){
+  const o=officerPositions.find(x=>x.id===id);
+  if(!o) return;
+  const tip=document.getElementById('tip-'+id);
+  if(tip) tip.style.display=tip.style.display==='none'?'block':'none';
+}
+function fireShortcut(action){
+  const msgs={backup:'🚨 Backup request sent to nearest units!',report:'📝 Quick report form opened.',lookup:'🔍 Record lookup terminal ready.',alert:'📢 Broadcast alert sent to all units!',checkin:'✅ Check-in confirmed. Location logged.',sos:'🏥 Medical team alerted. ETA: 8 min.'};
+  showToast(msgs[action]||'Action executed!',action==='backup'||action==='sos'?'red':'green');
+}
+function simulateLostPhone(){
+  showToast('📱 LOST PHONE ALERT received! GPS tracking enabled. Low power mode ON. Location sent.','gold');
+  showModal(`<div class="modal-title">📱 LOST PHONE ALERT</div>
+    <div style="background:rgba(230,59,59,.1);border:1px solid rgba(230,59,59,.3);border-radius:8px;padding:16px;margin-bottom:16px">
+      <div style="color:var(--red);font-family:var(--font-mono);font-size:12px;font-weight:600;margin-bottom:8px">⚠ EMERGENCY SHORTCUTS ACTIVATED</div>
+      <div style="font-size:12px;color:var(--gray-1);line-height:2">
+        ✓ Low Power Mode: <span style="color:var(--green)">ENABLED</span><br>
+        ✓ Mobile Data: <span style="color:var(--green)">ON</span><br>
+        ✓ WiFi: <span style="color:var(--green)">ON</span><br>
+        ✓ Location Sharing: <span style="color:var(--green)">ACTIVE (every 60s)</span><br>
+        ✓ Screen Lock: <span style="color:var(--green)">ENGAGED</span>
+      </div>
+    </div>
+    <div style="background:var(--navy-3);border-radius:6px;padding:12px;font-family:var(--font-mono);font-size:10px;color:var(--gray-1)">
+      Last known location: KN 7 Ave, Kigali<br>
+      GPS coordinates: -1.9441°S, 30.0619°E<br>
+      Battery: 23% · Signal: Strong
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:14px" onclick="closeModal()">ACKNOWLEDGE</button>
+  `);
+}
+
+// ──────────────────────────────────────────────────────────────
+//  CRIMINAL RECORDS
+// ──────────────────────────────────────────────────────────────
+let recFilter='all',recSearch='';
+function renderRecords(){
+  const records=DB.get('records')||[];
+  const filtered=records.filter(r=>{
+    const q=recSearch.toLowerCase();
+    const matchQ=!q||r.name.toLowerCase().includes(q)||r.nid.includes(q)||(r.id||'').includes(q);
+    const matchS=recFilter==='all'||r.status===recFilter;
+    return matchQ&&matchS;
+  });
+  const rclr={High:'var(--red)',Medium:'var(--gold)',Low:'var(--green)'};
+  const scfg={warrant:{l:'ACTIVE WARRANT',b:'badge-red'},'in-custody':{l:'IN CUSTODY',b:'badge-orange'},released:{l:'RELEASED',b:'badge-green'}};
+  return `<div class="page fade-in">
+    <div class="page-header">
+      <div><div class="page-title">▦ Criminal <span>Records</span></div><div class="page-subtitle">DATABASE · ENCRYPTED · AUDITED</div></div>
+      <button class="btn btn-gold btn-sm" onclick="showAddRecord()">+ ADD RECORD</button>
+    </div>
+    <div class="stat-grid" style="grid-template-columns:repeat(5,1fr)">
+      <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value">${records.length}</div></div>
+      <div class="stat-card red"><div class="stat-label">Warrants</div><div class="stat-value" style="color:var(--red)">${records.filter(r=>r.status==='warrant').length}</div></div>
+      <div class="stat-card"><div class="stat-label">In Custody</div><div class="stat-value" style="color:var(--orange)">${records.filter(r=>r.status==='in-custody').length}</div></div>
+      <div class="stat-card green"><div class="stat-label">Released</div><div class="stat-value" style="color:var(--green)">${records.filter(r=>r.status==='released').length}</div></div>
+      <div class="stat-card gold"><div class="stat-label">High Risk</div><div class="stat-value" style="color:var(--gold)">${records.filter(r=>r.risk==='High').length}</div></div>
+    </div>
+    <div class="card">
+      <div class="flex-between" style="margin-bottom:14px;flex-wrap:wrap;gap:10px">
+        <input class="input" placeholder="🔍  Search name, NID, case..." value="${recSearch}" oninput="recSearch=this.value;rerenderRecords()" style="width:280px"/>
+        <div class="flex-row" style="gap:6px;flex-wrap:wrap">
+          ${['all','warrant','in-custody','released'].map(f=>`<button onclick="recFilter='${f}';rerenderRecords()" style="padding:4px 12px;border-radius:4px;border:1px solid var(--border);background:${recFilter===f?'var(--accent)':'transparent'};color:${recFilter===f?'#fff':'var(--gray-1)'};font-family:var(--font-mono);font-size:9px;cursor:pointer;text-transform:uppercase;letter-spacing:1px">${f==='all'?'All':f==='warrant'?'Warrants':f==='in-custody'?'Custody':'Released'}</button>`).join('')}
+        </div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>NAME</th><th>NID</th><th>PASSPORT</th><th>RISK</th><th>STATUS</th><th>OFFENCES</th><th>ACTION</th></tr></thead>
+        <tbody>
+          ${filtered.map(r=>`<tr>
+            <td>
+              <div class="flex-row" style="gap:8px">
+                <div style="width:28px;height:28px;border-radius:50%;background:${rclr[r.risk]||'var(--accent)'}22;border:1px solid ${rclr[r.risk]||'var(--accent)'}44;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:10px;color:${rclr[r.risk]||'var(--accent)'};flex-shrink:0">${r.photo||r.name.slice(0,2).toUpperCase()}</div>
+                <div><div style="font-size:12px;font-weight:600">${r.name}</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1)">${r.dob||''}</div></div>
+              </div>
+            </td>
+            <td style="font-family:var(--font-mono);font-size:10px;color:var(--gray-1)">${(r.nid||'').slice(0,8)}...</td>
+            <td style="font-family:var(--font-mono);font-size:10px">${r.passport||''}</td>
+            <td><span style="color:${rclr[r.risk]||'var(--white)'};font-weight:600;font-size:12px">${r.risk||''}</span></td>
+            <td><span class="badge ${(scfg[r.status]||{b:'badge-blue'}).b}">${(scfg[r.status]||{l:r.status}).l}</span></td>
+            <td style="font-size:11px;color:var(--gray-1)">${(r.offences||[]).join(' · ')||'—'}</td>
+            <td>
+              <div class="flex-row" style="gap:5px">
+                <button class="btn btn-ghost btn-sm" onclick="viewRecord('${r.id}')">VIEW</button>
+                ${r.status==='warrant'?`<button class="btn btn-danger btn-sm" onclick="alertWarrant('${r.id}')">🚨</button>`:''}
+              </div>
+            </td>
+          </tr>`).join('')||'<tr><td colspan="7" style="text-align:center;color:var(--gray-2);padding:30px;font-family:var(--font-mono);font-size:11px">NO RECORDS FOUND</td></tr>'}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+function rerenderRecords(){ document.getElementById('main-content').innerHTML=renderRecords(); }
+function viewRecord(id){
+  const r=DB.find('records',id);
+  if(!r) return;
+  const rclr={High:'var(--red)',Medium:'var(--gold)',Low:'var(--green)'};
+  const scfg={warrant:{l:'ACTIVE WARRANT',b:'badge-red'},'in-custody':{l:'IN CUSTODY',b:'badge-orange'},released:{l:'RELEASED',b:'badge-green'}};
+  showModal(`<div class="modal-title">▦ Criminal Record</div>
+    <div class="flex-between" style="margin-bottom:16px">
+      <div><div style="font-family:var(--font-display);font-size:18px;font-weight:700">${r.name}</div><div style="font-family:var(--font-mono);font-size:10px;color:var(--accent-light);margin-top:2px">${r.id}</div></div>
+      <span class="badge ${(scfg[r.status]||{b:'badge-blue'}).b}" style="font-size:11px">${(scfg[r.status]||{l:r.status}).l}</span>
+    </div>
+    <div class="grid-2">
+      ${[['Full Name',r.name],['Date of Birth',r.dob],['NID',r.nid],['Passport',r.passport],['Nationality',r.nationality||'Rwandan'],['Address',r.address||'—'],['Height',r.height?r.height+'cm':'—'],['Gender',r.gender||'—'],['Risk Level',r.risk],['Unit',r.unit]].map(([l,v])=>`<div style="padding:8px 10px;background:var(--navy-3);border-radius:5px"><div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1);margin-bottom:2px">${l}</div><div style="font-size:12px;color:${l==='Risk Level'?rclr[v]||v:'var(--white)'}">${v||'—'}</div></div>`).join('')}
+    </div>
+    <div style="margin-top:14px"><div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1);margin-bottom:8px;text-transform:uppercase">OFFENCES</div>
+    ${(r.offences||[]).map(o=>`<div style="padding:6px 10px;background:var(--navy-3);border-radius:5px;border-left:2px solid var(--red);margin-bottom:5px;font-size:12px">⚠ ${o}</div>`).join('')||'<div style="color:var(--gray-2);font-size:12px">None recorded</div>'}</div>
+    <div style="margin-top:10px"><div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1);margin-bottom:6px">LINKED CASES</div>
+    ${(r.cases||[]).map(c=>`<span style="display:inline-block;margin:0 5px 5px 0;padding:3px 10px;background:rgba(46,109,180,.15);border:1px solid rgba(46,109,180,.3);border-radius:4px;font-family:var(--font-mono);font-size:10px;color:var(--accent-light)">${c}</span>`).join('')||'—'}</div>
+    <div class="flex-row" style="margin-top:16px;justify-content:flex-end">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Close</button>
+      ${r.status==='warrant'?`<button class="btn btn-danger btn-sm" onclick="alertWarrant('${r.id}');closeModal()">🚨 ALERT UNITS</button>`:''}
+    </div>`);
+}
+function alertWarrant(id){
+  const r=DB.find('records',id);
+  if(r) showToast(`🚨 All units alerted — ${r.name} has an active warrant!`,'red');
+}
+function showAddRecord(){
+  showModal(`<div class="modal-title">+ NEW CRIMINAL RECORD</div>
+    <div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1);margin-bottom:14px">ALL FIELDS WITH * ARE REQUIRED</div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Full Name *</label><input class="input" id="ar-name" placeholder="Full legal name"/></div>
+      <div class="form-group"><label class="form-label">Date of Birth *</label><input class="input" id="ar-dob" type="date"/></div>
+      <div class="form-group"><label class="form-label">National ID *</label><input class="input" id="ar-nid" placeholder="16-digit NID"/></div>
+      <div class="form-group"><label class="form-label">Passport *</label><input class="input" id="ar-passport" placeholder="Passport number"/></div>
+      <div class="form-group"><label class="form-label">Height (cm)</label><input class="input" id="ar-height" type="number" placeholder="175"/></div>
+      <div class="form-group"><label class="form-label">Gender</label><select class="input" id="ar-gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+      <div class="form-group"><label class="form-label">Risk Level</label><select class="input" id="ar-risk"><option>High</option><option>Medium</option><option>Low</option></select></div>
+      <div class="form-group"><label class="form-label">Status</label><select class="input" id="ar-status"><option value="warrant">Active Warrant</option><option value="in-custody">In Custody</option><option value="released">Released</option></select></div>
+    </div>
+    <div class="form-group"><label class="form-label">Address</label><input class="input" id="ar-address" placeholder="Home address"/></div>
+    <div class="form-group"><label class="form-label">Offences (comma separated)</label><textarea class="input" id="ar-offences" rows="2" placeholder="e.g. Robbery 2024, Assault 2023"></textarea></div>
+    <div class="form-group"><label class="form-label">Linked Cases (comma separated)</label><input class="input" id="ar-cases" placeholder="e.g. RW-2025-001, RW-2024-002"/></div>
+    <div class="flex-row" style="justify-content:flex-end;margin-top:14px">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-gold btn-sm" onclick="submitRecord()">✓ SAVE RECORD</button>
+    </div>`);
+}
+function submitRecord(){
+  const name=document.getElementById('ar-name').value.trim();
+  const nid=document.getElementById('ar-nid').value.trim();
+  const passport=document.getElementById('ar-passport').value.trim();
+  const dob=document.getElementById('ar-dob').value;
+  if(!name||!nid||!passport||!dob){showToast('Fill required fields','red');return;}
+  const offences=document.getElementById('ar-offences').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const cases=document.getElementById('ar-cases').value.split(',').map(s=>s.trim()).filter(Boolean);
+  DB.push('records',{id:DB.genId(),name,dob,nid,passport,height:+document.getElementById('ar-height').value||0,gender:document.getElementById('ar-gender').value,risk:document.getElementById('ar-risk').value,status:document.getElementById('ar-status').value,address:document.getElementById('ar-address').value,offences,cases,convictions:offences.length,unit:currentUser.role==='supervisor'?'Admin':'CID',addedBy:currentUser.id,photo:name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(),nationality:'Rwandan',createdAt:DB.now()});
+  closeModal();
+  navigate('records');
+  showToast('Criminal record added to database!');
+}
+
+// ──────────────────────────────────────────────────────────────
+//  INVESTIGATION GRAPH
+// ──────────────────────────────────────────────────────────────
+const GENTS=[
+  {id:'s1',type:'suspect',label:'Jean Habonimana',x:50,y:38},{id:'s2',type:'suspect',label:'Eric Niyomugabo',x:24,y:22},
+  {id:'s3',type:'suspect',label:'Alice Muhire',x:76,y:22},{id:'w1',type:'witness',label:'Patrick Uwimana',x:14,y:60},
+  {id:'w2',type:'witness',label:'Rose Ineza',x:86,y:60},{id:'v1',type:'victim',label:'BK Bank Nyabugogo',x:50,y:68},
+  {id:'l1',type:'location',label:'KN 7 Warehouse',x:28,y:80},{id:'veh1',type:'vehicle',label:'RAB 5821 Toyota',x:72,y:78},
+];
+const GCONNS=[
+  {from:'s1',to:'v1',l:'Suspect in'},{from:'s2',to:'s1',l:'Associate'},{from:'s3',to:'s1',l:'Associate'},
+  {from:'w1',to:'v1',l:'Witnessed'},{from:'w2',to:'veh1',l:'Identified'},{from:'s2',to:'l1',l:'Seen at'},
+  {from:'veh1',to:'v1',l:'Used in'},{from:'s1',to:'l1',l:'Connected'},{from:'s3',to:'veh1',l:'Linked'},
+];
+const GCFG={suspect:{c:'#e63b3b',bg:'rgba(230,59,59,.15)',l:'SUSPECT'},witness:{c:'#2E6DB4',bg:'rgba(46,109,180,.15)',l:'WITNESS'},victim:{c:'#f07030',bg:'rgba(240,112,48,.15)',l:'VICTIM'},location:{c:'#f0a500',bg:'rgba(240,165,0,.15)',l:'LOCATION'},vehicle:{c:'#00c97d',bg:'rgba(0,201,125,.15)',l:'VEHICLE'}};
+let selGEnt=null;
+function renderInvestigation(){
+  return `<div class="page fade-in">
+    <div class="page-header">
+      <div><div class="page-title">🕸 Crime<span>Net</span></div><div class="page-subtitle">RELATIONSHIP-BASED CRIME INVESTIGATION</div></div>
+      <button class="btn btn-gold btn-sm">+ NEW CASE</button>
+    </div>
+    <div style="display:grid;grid-template-columns:260px 1fr;gap:18px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <div class="card-header">ACTIVE CASES</div>
+          ${[{id:'RW-2025-001',t:'BK Bank Robbery',d:'14 Jan 2025',s:'Active'},{id:'RW-2024-744',t:'Nyabugogo Theft',d:'03 Dec 2024',s:'Active'},{id:'RW-2024-881',t:'Vehicle Fraud Ring',d:'21 Nov 2024',s:'Pending'}].map((c,i)=>`<div onclick="this.style.background='rgba(46,109,180,.2)'" style="padding:10px 12px;border-radius:6px;background:${i===0?'rgba(46,109,180,.2)':'var(--navy-3)'};cursor:pointer;margin-bottom:6px;transition:all .15s"><div style="font-family:var(--font-mono);font-size:9px;color:var(--accent-light);margin-bottom:2px">${c.id}</div><div style="font-size:12px;font-weight:600;margin-bottom:4px">${c.t}</div><div class="flex-between"><span style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1)">${c.d}</span><span class="badge ${c.s==='Active'?'badge-red':'badge-gold'}">${c.s}</span></div></div>`).join('')}
+        </div>
+        <div class="card">
+          <div class="card-header">ENTITY TYPES</div>
+          ${Object.entries(GCFG).map(([t,c])=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><div style="width:10px;height:10px;border-radius:50%;background:${c.c};flex-shrink:0"></div><span style="font-size:11px;color:var(--gray-1)">${c.l}</span></div>`).join('')}
+        </div>
+        <div class="card" id="ent-detail"><div style="text-align:center;color:var(--gray-2);padding:10px;font-family:var(--font-mono);font-size:10px;letter-spacing:1px">CLICK A NODE TO INSPECT</div></div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-family:var(--font-display);font-size:14px;font-weight:700;letter-spacing:1px">BK Bank Robbery — RW-2025-001</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1)">${GENTS.length} entities · ${GCONNS.length} connections</div></div>
+          <button class="btn btn-ghost btn-sm">📄 EXPORT</button>
+        </div>
+        <div style="position:relative;height:480px;background:var(--navy)">
+          <svg viewBox="0 0 100 100" style="width:100%;height:100%;position:absolute;top:0;left:0" preserveAspectRatio="none" id="inv-svg">
+            ${Array.from({length:10},(_,i)=>`<line x1="${i*10}" y1="0" x2="${i*10}" y2="100" stroke="rgba(46,109,180,.05)" stroke-width=".3"/><line x1="0" y1="${i*10}" x2="100" y2="${i*10}" stroke="rgba(46,109,180,.05)" stroke-width=".3"/>`).join('')}
+            ${GCONNS.map(c=>{const f=GENTS.find(e=>e.id===c.from),t=GENTS.find(e=>e.id===c.to);if(!f||!t)return'';return`<g><line x1="${f.x}" y1="${f.y}" x2="${t.x}" y2="${t.y}" stroke="rgba(46,109,180,.4)" stroke-width=".4" stroke-dasharray="1,1"/><text x="${(f.x+t.x)/2}" y="${(f.y+t.y)/2}" fill="rgba(168,184,204,.5)" font-size="1.9" text-anchor="middle">${c.l}</text></g>`;}).join('')}
+            ${GENTS.map(e=>{const c=GCFG[e.type]||GCFG.suspect;return`<g id="gnode-${e.id}" onclick="selectNode('${e.id}')" style="cursor:pointer"><circle cx="${e.x}" cy="${e.y}" r="4" fill="${c.bg}" stroke="${c.c}" stroke-width=".4"/><circle cx="${e.x}" cy="${e.y}" r="1.6" fill="${c.c}"/><text x="${e.x}" y="${e.y+6.2}" fill="rgba(240,244,248,.8)" font-size="2.4" text-anchor="middle">${e.label.split(' ').pop()}</text></g>`;}).join('')}
+          </svg>
+          <div style="position:absolute;bottom:10px;right:14px;font-family:var(--font-mono);font-size:9px;color:var(--gray-2);letter-spacing:1px">CLICK NODE TO INSPECT</div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+function selectNode(id){
+  const e=GENTS.find(x=>x.id===id);
+  if(!e) return;
+  const c=GCFG[e.type];
+  const conns=GCONNS.filter(x=>x.from===id||x.to===id);
+  document.getElementById('ent-detail').innerHTML=`
+    <div style="padding:10px;background:var(--navy-3);border-radius:6px;border-left:3px solid ${c.c};margin-bottom:10px">
+      <div style="font-family:var(--font-mono);font-size:9px;color:${c.c};margin-bottom:2px">${c.l}</div>
+      <div style="font-size:13px;font-weight:600">${e.label}</div>
+    </div>
+    <div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1);margin-bottom:7px">CONNECTIONS (${conns.length})</div>
+    ${conns.map(conn=>{const other=GENTS.find(x=>x.id===(conn.from===id?conn.to:conn.from));if(!other)return'';const oc=GCFG[other.type];return`<div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid rgba(42,90,150,.1);font-size:11px"><div style="width:7px;height:7px;border-radius:50%;background:${oc.c};flex-shrink:0"></div><span style="flex:1;color:var(--white)">${other.label}</span><span style="font-family:var(--font-mono);font-size:9px;color:var(--gray-2)">${conn.l}</span></div>`;}).join('')}
+  `;
+}
+
+// ──────────────────────────────────────────────────────────────
+//  VIP MANAGEMENT
+// ──────────────────────────────────────────────────────────────
+function renderVIP(){
+  const vips=DB.get('vips')||[];
+  const bcfg={STATE:'badge-red',DIPLOMAT:'badge-blue',MILITARY:'badge-orange',CIVILIAN:'badge-green',JUDICIAL:'badge-gold'};
+  const rclr={High:'var(--red)',Medium:'var(--gold)',Low:'var(--green)'};
+  const checklist=['Route reconnaissance done','Counter-surveillance sweep','All officers briefed','Comms tested','Medical on standby','Exit routes identified','VIP brief distributed'];
+  return `<div class="page fade-in">
+    <div class="page-header">
+      <div><div class="page-title">◆ VIP <span>Ways</span></div><div class="page-subtitle">DIGNITARY & PROTOCOL MANAGEMENT</div></div>
+      ${currentUser.role==='supervisor'?`<button class="btn btn-gold btn-sm" onclick="showAddVIP()">+ ADD VIP</button>`:''}
+    </div>
+    <div class="stat-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="stat-card"><div class="stat-label">Total VIPs</div><div class="stat-value">${vips.length}</div></div>
+      <div class="stat-card red"><div class="stat-label">Active Details</div><div class="stat-value" style="color:var(--red)">${vips.filter(v=>v.status==='Active').length}</div></div>
+      <div class="stat-card gold"><div class="stat-label">Scheduled</div><div class="stat-value" style="color:var(--gold)">${vips.filter(v=>v.status==='Scheduled').length}</div></div>
+      <div class="stat-card green"><div class="stat-label">Officers Deployed</div><div class="stat-value" style="color:var(--green)">${vips.reduce((s,v)=>s+(v.officers||0),0)}</div></div>
+    </div>
+    <div class="grid-2" style="align-items:start">
+      <div class="card">
+        <div class="card-header">VIP PROFILES</div>
+        ${vips.map(v=>`<div style="padding:12px 14px;border-radius:6px;background:var(--navy-3);border:1px solid var(--border);margin-bottom:7px;cursor:pointer" onclick="selectVIP('${v.id}')">
+          <div class="flex-between">
+            <div><div style="font-weight:600;font-size:13px;margin-bottom:2px">${v.name}</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1)">${v.title} · ${v.protocol}</div></div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="badge ${bcfg[v.badge]||'badge-blue'}">${v.badge}</span><span class="badge ${v.status==='Active'?'badge-red':v.status==='Scheduled'?'badge-gold':'badge-green'}">${v.status}</span></div>
+          </div>
+        </div>`).join('')}
+      </div>
+      <div id="vip-detail"><div class="card" style="text-align:center;padding:40px;color:var(--gray-2)"><div style="font-size:36px;margin-bottom:10px">◆</div><div style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px">SELECT A VIP PROFILE</div></div></div>
+    </div>
+  </div>`;
+}
+function selectVIP(id){
+  const v=DB.find('vips',id);
+  if(!v) return;
+  const rclr={High:'var(--red)',Medium:'var(--gold)',Low:'var(--green)'};
+  const checks=[true,true,true,true,true,false,false];
+  const checklist=['Route reconnaissance done','Counter-surveillance sweep','All officers briefed','Comms tested','Medical on standby','Exit routes identified','VIP brief distributed'];
+  document.getElementById('vip-detail').innerHTML=`
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-header">PROFILE DETAIL</div>
+      <div class="grid-2" style="margin-bottom:14px">
+        ${[['Full Name',v.name],['Title',v.title],['Risk Level',v.risk],['Officers Assigned',v.officers],['Protocol',v.protocol],['Next Movement',v.nextMovement]].map(([l,val])=>`<div style="padding:9px 10px;background:var(--navy-3);border-radius:5px"><div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1);margin-bottom:2px">${l}</div><div style="font-size:12px;font-weight:500;color:${l==='Risk Level'?rclr[val]||val:'var(--white)'}">${val}</div></div>`).join('')}
+      </div>
+      ${v.notes?`<div style="padding:10px;background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.2);border-radius:5px;font-size:12px;color:var(--gray-1)">📋 ${v.notes}</div>`:''}
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <div class="flex-between" style="margin-bottom:12px">
+        <div class="card-header" style="margin:0">PROTOCOL CHECKLIST</div>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--green)">${checks.filter(Boolean).length}/${checklist.length} DONE</span>
+      </div>
+      ${checklist.map((item,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 8px;border-radius:4px;background:${checks[i]?'rgba(0,201,125,.06)':'transparent'};margin-bottom:3px;border-bottom:${i<checklist.length-1?'1px solid rgba(42,90,150,.1)':'none'}">
+        <div style="width:17px;height:17px;border-radius:3px;border:2px solid ${checks[i]?'var(--green)':'var(--gray-2)'};background:${checks[i]?'var(--green)':'transparent'};display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--navy);flex-shrink:0">${checks[i]?'✓':''}</div>
+        <span style="font-size:12px;color:${checks[i]?'var(--gray-1)':'var(--white)'}${checks[i]?';text-decoration:line-through':''}">${item}</span>
+      </div>`).join('')}
+      <div style="margin-top:10px;height:4px;background:var(--navy-3);border-radius:2px"><div style="width:${(checks.filter(Boolean).length/checklist.length)*100}%;height:100%;background:var(--green);border-radius:2px"></div></div>
+    </div>
+    <div class="flex-row">
+      <button class="btn btn-primary" style="flex:1;justify-content:center">📍 TRACK ROUTE</button>
+      <button class="btn btn-ghost" style="flex:1;justify-content:center">📄 BRIEF SHEET</button>
+    </div>
+  `;
+}
+function showAddVIP(){
+  showModal(`<div class="modal-title">+ ADD VIP PROFILE</div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Full Name *</label><input class="input" id="av-name" placeholder="Full name"/></div>
+      <div class="form-group"><label class="form-label">Title / Role *</label><input class="input" id="av-title" placeholder="e.g. Minister of Finance"/></div>
+      <div class="form-group"><label class="form-label">Badge Type</label><select class="input" id="av-badge"><option value="STATE">State</option><option value="DIPLOMAT">Diplomat</option><option value="MILITARY">Military</option><option value="CIVILIAN">Civilian</option><option value="JUDICIAL">Judicial</option></select></div>
+      <div class="form-group"><label class="form-label">Risk Level</label><select class="input" id="av-risk"><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option></select></div>
+      <div class="form-group"><label class="form-label">Officers Required</label><input class="input" id="av-officers" type="number" value="4"/></div>
+      <div class="form-group"><label class="form-label">Protocol</label><input class="input" id="av-protocol" value="Alpha-1"/></div>
+      <div class="form-group"><label class="form-label">Status</label><select class="input" id="av-status"><option value="Scheduled">Scheduled</option><option value="Active">Active</option></select></div>
+      <div class="form-group"><label class="form-label">Next Movement</label><input class="input" id="av-next" placeholder="e.g. Today 20:30"/></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="input" id="av-notes" rows="2" placeholder="Special instructions..."></textarea></div>
+    <div class="flex-row" style="justify-content:flex-end;margin-top:12px">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-gold btn-sm" onclick="submitVIP()">✓ SAVE</button>
+    </div>`);
+}
+function submitVIP(){
+  const name=document.getElementById('av-name').value.trim();
+  if(!name){showToast('Name is required','red');return;}
+  DB.push('vips',{id:DB.genId(),name,title:document.getElementById('av-title').value,badge:document.getElementById('av-badge').value,risk:document.getElementById('av-risk').value,officers:+document.getElementById('av-officers').value,protocol:document.getElementById('av-protocol').value,status:document.getElementById('av-status').value,nextMovement:document.getElementById('av-next').value,notes:document.getElementById('av-notes').value});
+  closeModal();navigate('vip');showToast('VIP profile added!');
+}
+
+// ──────────────────────────────────────────────────────────────
+//  EVIDENCE & MEDIA
+// ──────────────────────────────────────────────────────────────
+let evidenceItems=JSON.parse(localStorage.getItem('ptpro_evidence')||'[]');
+function renderEvidence(){
+  return `<div class="page fade-in">
+    <div class="page-header">
+      <div><div class="page-title">📹 Evidence <span>& Media</span></div><div class="page-subtitle">CRIME RECORDING · SHARING · EVIDENCE MANAGEMENT</div></div>
+      <button class="btn btn-gold btn-sm" onclick="document.getElementById('ev-file').click()">+ UPLOAD EVIDENCE</button>
+    </div>
+    <input type="file" id="ev-file" accept="image/*,video/*,audio/*" style="display:none" onchange="uploadEvidence(this)"/>
+    <div class="grid-2" style="align-items:start">
+      <div class="card">
+        <div class="card-header">CAPTURE TOOLS</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button class="btn btn-primary" style="justify-content:center" onclick="activateCamera()">📷 ACTIVATE CAMERA (Photo)</button>
+          <button class="btn btn-primary" style="justify-content:center" onclick="activateVideo()">🎥 ACTIVATE CAMERA (Video)</button>
+          <button class="btn btn-primary" style="justify-content:center" onclick="activateAudio()">🎤 RECORD AUDIO</button>
+          <div style="margin-top:4px;background:var(--navy-3);border-radius:6px;padding:12px" id="camera-area">
+            <div style="font-family:var(--font-mono);font-size:10px;color:var(--gray-2);text-align:center">Camera/recording area — browser permissions required</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">EVIDENCE FILES (${evidenceItems.length})</div>
+        ${evidenceItems.length===0?'<div style="color:var(--gray-2);font-size:12px;text-align:center;padding:30px;font-family:var(--font-mono)">NO EVIDENCE UPLOADED</div>':
+        evidenceItems.map(e=>`<div style="padding:10px 12px;background:var(--navy-3);border-radius:6px;margin-bottom:7px">
+          <div class="flex-between">
+            <div>
+              <div style="font-size:12px;font-weight:600">${e.name}</div>
+              <div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1)">${e.type.toUpperCase()} · ${e.time} · ${currentUser.name}</div>
+            </div>
+            <div class="flex-row" style="gap:6px">
+              ${e.type==='image'?`<img src="${e.url}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;cursor:pointer" onclick="window.open('${e.url}')"/>`:''}
+              <button class="btn btn-ghost btn-sm" onclick="shareEvidence('${e.id}')">SHARE</button>
+            </div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <video id="camera-feed" style="display:none;width:100%;border-radius:6px;margin-top:10px" autoplay></video>
+    <canvas id="camera-canvas" style="display:none"></canvas>
+  </div>`;
+}
+function uploadEvidence(inp){
+  const f=inp.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    const type=f.type.startsWith('image/')?'image':f.type.startsWith('video/')?'video':'audio';
+    const item={id:DB.genId(),name:f.name,type,url:e.target.result,time:DB.timeStr(),addedBy:currentUser.id};
+    evidenceItems.push(item);
+    localStorage.setItem('ptpro_evidence',JSON.stringify(evidenceItems));
+    navigate('evidence');
+    showToast('Evidence uploaded and stored!');
+  };
+  r.readAsDataURL(f);
+}
+function activateCamera(){
+  const area=document.getElementById('camera-area');
+  area.innerHTML='<div style="font-family:var(--font-mono);font-size:10px;color:var(--gold);margin-bottom:8px;text-align:center">📷 CAMERA ACTIVE</div>';
+  navigator.mediaDevices.getUserMedia({video:true}).then(stream=>{
+    const video=document.createElement('video');
+    video.srcObject=stream;video.autoplay=true;
+    video.style.cssText='width:100%;border-radius:6px;margin-bottom:8px';
+    area.appendChild(video);
+    const btn=document.createElement('button');
+    btn.className='btn btn-gold';btn.style.cssText='width:100%;justify-content:center';
+    btn.textContent='📷 CAPTURE PHOTO';
+    btn.onclick=()=>{
+      const canvas=document.createElement('canvas');
+      canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+      canvas.getContext('2d').drawImage(video,0,0);
+      const url=canvas.toDataURL('image/jpeg');
+      const item={id:DB.genId(),name:'capture_'+DB.timeStr()+'.jpg',type:'image',url,time:DB.timeStr(),addedBy:currentUser.id};
+      evidenceItems.push(item);
+      localStorage.setItem('ptpro_evidence',JSON.stringify(evidenceItems));
+      stream.getTracks().forEach(t=>t.stop());
+      navigate('evidence');
+      showToast('Photo captured and saved as evidence!');
+    };
+    area.appendChild(btn);
+  }).catch(()=>showToast('Camera permission denied','red'));
+}
+function activateVideo(){showToast('Video recording — open file picker to record a video','gold');document.getElementById('ev-file').click();}
+function activateAudio(){
+  showToast('Microphone access — recording audio...','gold');
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+    const rec=new MediaRecorder(stream);const chunks=[];
+    rec.ondataavailable=e=>chunks.push(e.data);
+    rec.onstop=()=>{
+      const blob=new Blob(chunks,{type:'audio/webm'});
+      const r=new FileReader();
+      r.onload=ev=>{
+        const item={id:DB.genId(),name:'recording_'+DB.timeStr()+'.webm',type:'audio',url:ev.target.result,time:DB.timeStr(),addedBy:currentUser.id};
+        evidenceItems.push(item);
+        localStorage.setItem('ptpro_evidence',JSON.stringify(evidenceItems));
+        navigate('evidence');
+        showToast('Audio recorded and saved!');
+      };
+      r.readAsDataURL(blob);
+    };
+    rec.start();
+    showModal(`<div class="modal-title">🎤 RECORDING AUDIO</div>
+      <div style="text-align:center;padding:20px">
+        <div style="font-size:40px;animation:pulse 1s ease infinite;margin-bottom:10px">🎤</div>
+        <div style="font-family:var(--font-mono);color:var(--red);letter-spacing:2px">RECORDING IN PROGRESS</div>
+      </div>
+      <button class="btn btn-danger" style="width:100%;justify-content:center;margin-top:14px" onclick="stopRec();closeModal()">⏹ STOP RECORDING</button>`);
+    window._activeRec=rec;window._activeStream=stream;
+  }).catch(()=>showToast('Microphone permission denied','red'));
+}
+function stopRec(){if(window._activeRec){window._activeRec.stop();window._activeStream?.getTracks().forEach(t=>t.stop());}}
+function shareEvidence(id){
+  const e=evidenceItems.find(x=>x.id===id);
+  if(!e) return;
+  const chats=DB.get('chats')||[];
+  showModal(`<div class="modal-title">📤 SHARE EVIDENCE</div>
+    <div style="font-size:12px;color:var(--gray-1);margin-bottom:14px">Share <strong style="color:var(--white)">${e.name}</strong> to a chat channel:</div>
+    ${chats.map(c=>`<div style="padding:10px 12px;background:var(--navy-3);border-radius:6px;margin-bottom:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center" onclick="sendEvidenceToChat('${e.id}','${c.id}')">
+      <div><div style="font-size:12px;font-weight:600">${c.civilianName}</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1)">${c.status.toUpperCase()}</div></div>
+      <button class="btn btn-primary btn-sm">SEND</button>
+    </div>`).join('')||'<div style="color:var(--gray-2);text-align:center;padding:20px;font-size:12px">No active chats</div>'}
+    <button class="btn btn-ghost btn-sm" onclick="closeModal()" style="margin-top:10px;width:100%;justify-content:center">Cancel</button>`);
+}
+function sendEvidenceToChat(evId,chatId){
+  const ev=evidenceItems.find(x=>x.id===evId);
+  if(!ev) return;
+  DB.push('messages',{id:DB.genId(),chatId,senderId:currentUser.id,senderName:currentUser.name,text:'[Evidence attached]',mediaUrl:ev.url,type:ev.type,time:DB.timeStr(),createdAt:DB.now()});
+  DB.update('chats',chatId,{lastMsg:'[Evidence: '+ev.name+']',lastTime:DB.timeStr()});
+  closeModal();
+  showToast('Evidence shared to chat!');
+}
+
+// ──────────────────────────────────────────────────────────────
+//  USER MANAGEMENT (Supervisor only)
+// ──────────────────────────────────────────────────────────────
+function renderUsers(){
+  const users=DB.get('users')||[];
+  const rclr={supervisor:'var(--gold)',officer:'var(--accent-light)',civilian:'var(--green)'};
+  return `<div class="page fade-in">
+    <div class="page-header">
+      <div><div class="page-title">👥 User <span>Management</span></div><div class="page-subtitle">ALL SYSTEM USERS · SUPERVISOR ACCESS</div></div>
+      <span style="font-family:var(--font-mono);font-size:11px;color:var(--gray-1)">${users.length} TOTAL USERS</span>
+    </div>
+    <div class="card">
+      <table class="data-table">
+        <thead><tr><th>NAME</th><th>USERNAME</th><th>ROLE</th><th>NID</th><th>PHONE</th><th>STATUS</th><th>ACTIONS</th></tr></thead>
+        <tbody>
+          ${users.map(u=>`<tr>
+            <td>
+              <div class="flex-row" style="gap:8px">
+                <div class="officer-avatar" style="width:28px;height:28px;font-size:10px">${u.photo?`<img src="${u.photo}" alt=""/>`:(u.name||'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+                <div><div style="font-size:12px;font-weight:600">${u.name}</div><div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1)">${u.dob||''}</div></div>
+              </div>
+            </td>
+            <td style="font-family:var(--font-mono);font-size:11px">${u.username}</td>
+            <td><span style="color:${rclr[u.role]||'var(--white)'};font-weight:600;text-transform:uppercase;font-size:11px">${u.role}</span></td>
+            <td style="font-family:var(--font-mono);font-size:10px;color:var(--gray-1)">${(u.nid||'').slice(0,8)}...</td>
+            <td style="font-size:11px">${u.phone||'—'}</td>
+            <td><span class="badge ${u.approved?'badge-green':'badge-gold'}">${u.approved?'ACTIVE':'PENDING'}</span></td>
+            <td>
+              <div class="flex-row" style="gap:5px">
+                <button class="btn btn-ghost btn-sm" onclick="viewUser('${u.id}')">VIEW</button>
+                ${u.id!=='u1'?`<button class="btn btn-danger btn-sm" onclick="deleteUser('${u.id}')">✕</button>`:''}
+              </div>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+function viewUser(id){
+  const u=DB.find('users',id);
+  if(!u) return;
+  showModal(`<div class="modal-title">👤 User Profile</div>
+    <div style="text-align:center;margin-bottom:16px">
+      <div class="officer-avatar" style="width:70px;height:70px;font-size:22px;margin:0 auto 8px">${u.photo?`<img src="${u.photo}" alt=""/>`:(u.name||'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+      <div style="font-family:var(--font-display);font-size:18px;font-weight:700">${u.name}</div>
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--gold);text-transform:uppercase">${u.role}</div>
+    </div>
+    <div class="grid-2">
+      ${[['Username',u.username],['Date of Birth',u.dob],['NID',u.nid],['Passport',u.passport],['Height',u.height?u.height+'cm':'—'],['Gender',u.gender||'—'],['Phone',u.phone||'—'],['Address',u.address||'—'],['Nationality',u.nationality||'—'],['Emergency Contact',u.emergency||'—']].map(([l,v])=>`<div style="padding:8px 10px;background:var(--navy-3);border-radius:5px"><div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1);margin-bottom:2px">${l}</div><div style="font-size:12px;color:var(--white)">${v||'—'}</div></div>`).join('')}
+    </div>
+    <div class="flex-row" style="justify-content:flex-end;margin-top:16px">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Close</button>
+    </div>`);
+}
+function deleteUser(id){
+  if(!confirm('Delete this user?')) return;
+  DB.delete('users',id);
+  navigate('users');
+  showToast('User removed.','red');
+}
+
+// ──────────────────────────────────────────────────────────────
+//  APPROVALS (Supervisor only)
+// ──────────────────────────────────────────────────────────────
+function renderApprovals(){
+  const pending=DB.get('pending_users')||[];
+  return `<div class="page fade-in">
+    <div class="page-header">
+      <div><div class="page-title">✅ <span>Approvals</span></div><div class="page-subtitle">PENDING USER REGISTRATION REQUESTS</div></div>
+      <span class="badge ${pending.length>0?'badge-red':'badge-green'}">${pending.length} PENDING</span>
+    </div>
+    ${pending.length===0?`<div class="card" style="text-align:center;padding:60px;color:var(--gray-2)"><div style="font-size:36px;margin-bottom:12px">✅</div><div style="font-family:var(--font-mono);font-size:11px;letter-spacing:2px">NO PENDING APPROVALS</div></div>`:
+    `<div class="card">
+      ${pending.map(u=>`<div style="padding:14px;background:var(--navy-3);border-radius:8px;border:1px solid rgba(240,165,0,.2);margin-bottom:10px">
+        <div class="flex-between" style="margin-bottom:10px">
+          <div class="flex-row">
+            <div class="officer-avatar" style="width:38px;height:38px">${u.photo?`<img src="${u.photo}" alt=""/>`:(u.name||'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+            <div>
+              <div style="font-weight:600;font-size:13px">${u.name}</div>
+              <div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-1)">${u.role.toUpperCase()} · NID: ${(u.nid||'').slice(0,8)}...</div>
+            </div>
+          </div>
+          <div class="flex-row">
+            <button class="btn btn-green btn-sm" onclick="approveUser('${u.id}')">✓ APPROVE</button>
+            <button class="btn btn-danger btn-sm" onclick="rejectUser('${u.id}')">✗ REJECT</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:11px">
+          <div><span style="color:var(--gray-1)">DOB:</span> ${u.dob||'—'}</div>
+          <div><span style="color:var(--gray-1)">Height:</span> ${u.height||'—'}cm</div>
+          <div><span style="color:var(--gray-1)">Phone:</span> ${u.phone||'—'}</div>
+          <div><span style="color:var(--gray-1)">Passport:</span> ${u.passport||'—'}</div>
+          <div style="grid-column:span 4"><span style="color:var(--gray-1)">Address:</span> ${u.address||'—'}</div>
+        </div>
+      </div>`).join('')}
+    </div>`}
+  </div>`;
+}
+function approveUser(id){
+  const pending=DB.get('pending_users')||[];
+  const user=pending.find(u=>u.id===id);
+  if(!user) return;
+  user.approved=true;
+  DB.push('users',user);
+  DB.set('pending_users',pending.filter(u=>u.id!==id));
+  navigate('approvals');
+  showToast(`${user.name} approved and can now log in!`);
+}
+function rejectUser(id){
+  const pending=(DB.get('pending_users')||[]).filter(u=>u.id!==id);
+  DB.set('pending_users',pending);
+  navigate('approvals');
+  showToast('User registration rejected.','red');
+}
+
+// ──────────────────────────────────────────────────────────────
+//  SYSTEM ADMIN (Supervisor only)
+// ──────────────────────────────────────────────────────────────
+function renderAdmin(){
+  const users=DB.get('users')||[];
+  const records=DB.get('records')||[];
+  const tasks=DB.get('tasks')||[];
+  const chats=DB.get('chats')||[];
+  return `<div class="page fade-in">
+    <div class="page-header">
+      <div><div class="page-title">⚙ System <span>Admin</span></div><div class="page-subtitle">FULL SYSTEM ADMINISTRATION · SUPERVISOR ONLY</div></div>
+    </div>
+    <div class="stat-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="stat-card gold"><div class="stat-label">Users</div><div class="stat-value" style="color:var(--gold)">${users.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Criminal Records</div><div class="stat-value">${records.length}</div></div>
+      <div class="stat-card green"><div class="stat-label">Active Tasks</div><div class="stat-value" style="color:var(--green)">${tasks.length}</div></div>
+      <div class="stat-card red"><div class="stat-label">Helpline Chats</div><div class="stat-value" style="color:var(--red)">${chats.length}</div></div>
+    </div>
+    <div class="grid-2" style="align-items:start">
+      <div class="card">
+        <div class="card-header">SYSTEM ACTIONS</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button class="btn btn-primary" style="justify-content:flex-start" onclick="navigate('users')">👥 Manage All Users</button>
+          <button class="btn btn-primary" style="justify-content:flex-start" onclick="navigate('approvals')">✅ Review Pending Approvals</button>
+          <button class="btn btn-primary" style="justify-content:flex-start" onclick="navigate('records')">▦ Criminal Records Database</button>
+          <button class="btn btn-primary" style="justify-content:flex-start" onclick="showAddTask()">⬡ Create New Task/Alert</button>
+          <button class="btn btn-ghost" style="justify-content:flex-start" onclick="exportData()">📤 Export System Data (JSON)</button>
+          <button class="btn btn-danger" style="justify-content:flex-start;margin-top:10px" onclick="resetSystem()">⚠ RESET ALL DATA</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">SYSTEM LOG</div>
+        ${[
+          {time:DB.timeStr(),action:'Supervisor logged in',user:currentUser.name},
+          {time:'22:14',action:'SOS alert received — officer Kayitesi',user:'SYSTEM'},
+          {time:'21:58',action:'New civilian registration submitted',user:'SYSTEM'},
+          {time:'21:45',action:'Criminal record #r1 accessed',user:'Insp. Alice Uwase'},
+          {time:'21:30',action:'Task "VIP Escort" created',user:currentUser.name},
+        ].map(log=>`<div style="display:flex;gap:12px;padding:9px 0;border-bottom:1px solid rgba(42,90,150,.1)">
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--gold);min-width:40px">${log.time}</div>
+          <div style="flex:1;font-size:11px">${log.action}</div>
+          <div style="font-family:var(--font-mono);font-size:9px;color:var(--gray-2)">${log.user}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+function exportData(){
+  const data={users:DB.get('users'),records:DB.get('records'),tasks:DB.get('tasks'),chats:DB.get('chats'),messages:DB.get('messages'),vips:DB.get('vips'),media:DB.get('media')};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='policetech_data.json';a.click();
+}
+function resetSystem(){
+  if(!confirm('RESET ALL DATA? This cannot be undone!')) return;
+  Object.keys(localStorage).filter(k=>k.startsWith('ptpro_')).forEach(k=>localStorage.removeItem(k));
+  seedDB();
+  navigate('admin');
+  showToast('System reset. Default data restored.','gold');
+}
+
+// ══════════════════════════════════════════════════════════════
+//  CIVILIAN APP
+// ══════════════════════════════════════════════════════════════
+function launchCivilianApp(){
+  const shell=document.getElementById('civilian-shell');
+  shell.classList.remove('hidden');
+  document.getElementById('civ-user-label').textContent='👤 '+currentUser.name;
+  civPage('home');
+}
+function civPage(page){
+  ['home','media','report','helpline'].forEach(p=>{
+    document.getElementById('civ-tab-'+p)?.classList.toggle('active',p===page);
+  });
+  const content=document.getElementById('civ-content');
+  switch(page){
+    case 'home':     content.innerHTML=renderCivHome(); break;
+    case 'media':    content.innerHTML=renderCivMedia(); break;
+    case 'report':   content.innerHTML=renderCivReport(); break;
+    case 'helpline': content.innerHTML=''; content.appendChild(buildCivHelpline()); break;
+  }
+}
+function renderCivHome(){
+  return `<div style="animation:fadeIn .3s ease">
+    <div class="civ-hero">
+      <h1>🛡 WELCOME TO POLICETECH</h1>
+      <p>Your digital connection to law enforcement. Report incidents, get help, and stay informed — all in one place.</p>
+      <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap">
+        <button class="civ-btn civ-btn-ghost" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4);color:#fff" onclick="civPage('report')">🚨 Report Incident</button>
+        <button class="civ-btn civ-btn-ghost" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4);color:#fff" onclick="civPage('helpline')">💬 Helpline Chat</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px">
+      ${[['🚨','Emergency','Call 112 or use the report feature','report','#e53935'],['💬','Helpline Chat','Chat with an officer online','helpline','#1565C0'],['📢','Media & News','Police announcements','media','#0288D1'],['📱','Lost Phone','Track a stolen phone','#','#43A047']].map(([icon,title,desc,page,color])=>`
+      <div class="civ-card" style="cursor:pointer;transition:all .15s;border-top:3px solid ${color}" onclick="${page!=='#'?`civPage('${page}')`:'showLostPhoneCiv()'}">
+        <div style="font-size:32px;margin-bottom:8px">${icon}</div>
+        <div style="font-family:var(--font-display);font-size:15px;font-weight:700;color:${color};margin-bottom:4px">${title}</div>
+        <div style="font-size:12px;color:#666">${desc}</div>
+      </div>`).join('')}
+    </div>
+    <div class="civ-card">
+      <div class="civ-card-title">📢 LATEST ANNOUNCEMENTS</div>
+      ${(DB.get('media')||[]).slice(0,2).map(p=>`<div style="padding:12px 0;border-bottom:1px solid #eee;display:flex;gap:14px;align-items:start">
+        <div style="width:42px;height:42px;background:#e3f2fd;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📢</div>
+        <div><div style="font-weight:600;font-size:13px;color:#1a1a2e">${p.title}</div><div style="font-size:11px;color:#999;margin-top:2px">${p.date}</div></div>
+        <span style="margin-left:auto;background:#e3f2fd;color:#1565C0;border-radius:3px;padding:2px 8px;font-size:10px;font-weight:600;font-family:var(--font-mono);flex-shrink:0">${p.category}</span>
+      </div>`).join('')}
+      <button class="civ-btn civ-btn-ghost" style="margin-top:12px;padding:7px 16px;font-size:11px" onclick="civPage('media')">VIEW ALL →</button>
+    </div>
+  </div>`;
+}
+function renderCivMedia(){
+  const posts=DB.get('media')||[];
+  return `<div style="animation:fadeIn .3s ease">
+    <div style="margin-bottom:20px"><div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:#1565C0;letter-spacing:2px">📢 POLICE MEDIA PAGE</div><div style="font-size:12px;color:#888;margin-top:2px">Official announcements, notices, and public information</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      ${posts.map(p=>`<div class="civ-card" style="animation:fadeIn .3s ease">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px">
+          <span style="background:#e3f2fd;color:#1565C0;border-radius:3px;padding:2px 10px;font-size:10px;font-weight:600;font-family:var(--font-mono)">${p.category}</span>
+          <span style="font-size:11px;color:#999">${p.date}</span>
+        </div>
+        <div class="civ-card-title">${p.title}</div>
+        <p style="font-size:13px;color:#555;line-height:1.6">${p.body}</p>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+function renderCivReport(){
+  return `<div style="animation:fadeIn .3s ease">
+    <div style="margin-bottom:20px"><div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:#e53935;letter-spacing:2px">🚨 REPORT AN INCIDENT</div><div style="font-size:12px;color:#888;margin-top:2px">Submit a crime or incident report directly to police</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+      <div class="civ-card">
+        <div class="civ-card-title">📋 INCIDENT DETAILS</div>
+        <div style="margin-bottom:12px"><label style="display:block;font-size:11px;font-weight:600;color:#555;margin-bottom:4px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Incident Type *</label>
+          <select class="civ-input" id="rp-type"><option value="">Select type...</option><option>Robbery</option><option>Assault</option><option>Theft</option><option>Accident</option><option>Suspicious Activity</option><option>Drug Activity</option><option>Domestic Violence</option><option>Missing Person</option><option>Other</option></select>
+        </div>
+        <div style="margin-bottom:12px"><label style="display:block;font-size:11px;font-weight:600;color:#555;margin-bottom:4px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Location *</label>
+          <input class="civ-input" id="rp-loc" placeholder="Where did it happen?"/>
+        </div>
+        <div style="margin-bottom:12px"><label style="display:block;font-size:11px;font-weight:600;color:#555;margin-bottom:4px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Date & Time *</label>
+          <input class="civ-input" id="rp-dt" type="datetime-local"/>
+        </div>
+        <div style="margin-bottom:12px"><label style="display:block;font-size:11px;font-weight:600;color:#555;margin-bottom:4px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Description *</label>
+          <textarea class="civ-input" id="rp-desc" rows="4" placeholder="Describe what happened in detail..."></textarea>
+        </div>
+        <div style="margin-bottom:14px"><label style="display:block;font-size:11px;font-weight:600;color:#555;margin-bottom:4px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Attach Evidence (Photo/Video/Audio)</label>
+          <input type="file" id="rp-media" accept="image/*,video/*,audio/*" multiple style="display:none" onchange="previewReportMedia(this)"/>
+          <button class="civ-btn civ-btn-ghost" style="padding:7px 14px;font-size:11px;width:100%;justify-content:center" onclick="document.getElementById('rp-media').click()">📎 ATTACH FILES</button>
+          <div id="rp-previews" style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"></div>
+        </div>
+        <button class="civ-btn civ-btn-red" style="width:100%;justify-content:center;padding:11px" onclick="submitReport()">🚨 SUBMIT REPORT</button>
+      </div>
+      <div>
+        <div class="civ-card" style="margin-bottom:16px">
+          <div class="civ-card-title">📋 MY REPORTS</div>
+          ${((DB.get('reports')||[]).filter(r=>r.userId===currentUser.id)).map(r=>`<div style="padding:10px 12px;background:#f5f7fa;border-radius:6px;border-left:3px solid #e53935;margin-bottom:7px">
+            <div style="font-weight:600;font-size:12px;color:#1a1a2e">${r.type}</div>
+            <div style="font-size:11px;color:#777;margin-top:2px">${r.location} · ${r.datetime||r.date}</div>
+            <span style="display:inline-block;margin-top:5px;background:${r.status==='received'?'#e3f2fd':r.status==='resolved'?'#e8f5e9':'#fff8e1'};color:${r.status==='received'?'#1565C0':r.status==='resolved'?'#2e7d32':'#e65100'};border-radius:3px;padding:1px 8px;font-size:9px;font-weight:600;font-family:var(--font-mono)">${(r.status||'received').toUpperCase()}</span>
+          </div>`).join('')||'<div style="color:#aaa;font-size:12px;text-align:center;padding:20px;font-family:var(--font-mono)">NO REPORTS SUBMITTED YET</div>'}
+        </div>
+        <div class="civ-card">
+          <div class="civ-card-title">📞 EMERGENCY CONTACTS</div>
+          ${[['🚨','Emergency','112'],['🚒','Fire Brigade','113'],['🏥','Ambulance','912'],['👮','Police HQ','+250 788 311 155']].map(([icon,label,num])=>`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #eee">
+            <span style="font-size:20px">${icon}</span>
+            <div style="flex:1"><div style="font-weight:600;font-size:13px">${label}</div></div>
+            <a href="tel:${num}" style="background:#1565C0;color:#fff;padding:4px 14px;border-radius:5px;font-size:12px;font-weight:600;text-decoration:none">${num}</a>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+let reportMediaFiles=[];
+function previewReportMedia(inp){
+  reportMediaFiles=Array.from(inp.files);
+  const prev=document.getElementById('rp-previews');
+  if(!prev) return;
+  prev.innerHTML='';
+  reportMediaFiles.forEach(f=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      if(f.type.startsWith('image/')){
+        const img=document.createElement('img');
+        img.src=e.target.result;img.style.cssText='width:60px;height:60px;object-fit:cover;border-radius:5px;border:2px solid #1565C0';
+        prev.appendChild(img);
+      } else {
+        const div=document.createElement('div');
+        div.style.cssText='background:#e3f2fd;border-radius:5px;padding:8px 12px;font-size:11px;color:#1565C0;font-weight:600';
+        div.textContent=f.name.slice(0,14)+'...';
+        prev.appendChild(div);
+      }
+    };
+    r.readAsDataURL(f);
+  });
+}
+function submitReport(){
+  const type=document.getElementById('rp-type')?.value;
+  const loc=document.getElementById('rp-loc')?.value.trim();
+  const desc=document.getElementById('rp-desc')?.value.trim();
+  const dt=document.getElementById('rp-dt')?.value;
+  if(!type||!loc||!desc){showToast('Fill all required fields','red');return;}
+  const report={id:DB.genId(),userId:currentUser.id,userName:currentUser.name,type,location:loc,description:desc,datetime:dt,status:'received',attachments:reportMediaFiles.length,createdAt:DB.now(),date:DB.dateStr()};
+  DB.push('reports',report);
+  // Create helpline chat from report
+  const chatId=DB.genId();
+  DB.push('chats',{id:chatId,civilianId:currentUser.id,civilianName:currentUser.name,officerId:null,status:'pending',lastMsg:'[REPORT] '+type+' at '+loc,lastTime:DB.timeStr(),unread:1,createdAt:DB.now()});
+  DB.push('messages',{id:DB.genId(),chatId,senderId:currentUser.id,senderName:currentUser.name,text:'🚨 INCIDENT REPORT\n\nType: '+type+'\nLocation: '+loc+'\nTime: '+(dt||DB.timeStr())+'\n\nDescription: '+desc,type:'text',time:DB.timeStr(),createdAt:DB.now()});
+  reportMediaFiles=[];
+  showToast('Report submitted! A police officer will respond shortly.');
+  civPage('report');
+}
+function showLostPhoneCiv(){
+  showToast('📱 LOST PHONE mode activated — location sharing and shortcuts enabled','gold');
+}
+
+// Civilian Helpline
+function buildCivHelpline(){
+  const div=document.createElement('div');
+  div.style.cssText='animation:fadeIn .3s ease;height:calc(100vh - 90px);display:flex;flex-direction:column';
+  const chats=(DB.get('chats')||[]).filter(c=>c.civilianId===currentUser.id);
+  let activeCivChat=chats[0]||null;
+  const render=()=>{
+    div.innerHTML=`
+      <div style="margin-bottom:16px"><div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:#1565C0;letter-spacing:2px">💬 POLICE HELPLINE</div><div style="font-size:12px;color:#888;margin-top:2px">Chat directly with a police officer</div></div>
+      <div style="display:grid;grid-template-columns:260px 1fr;gap:16px;flex:1;min-height:0">
+        <div style="background:#fff;border:1px solid #e0e0e0;border-radius:10px;overflow:hidden;display:flex;flex-direction:column">
+          <div style="padding:12px 14px;border-bottom:1px solid #eee;font-weight:700;font-size:13px;color:#1565C0;font-family:var(--font-display);letter-spacing:1px">MY CONVERSATIONS</div>
+          ${chats.map(c=>`<div onclick="activeCivChat=DB.find('chats','${c.id}');civRenderChat(div,activeCivChat)" style="padding:12px 14px;cursor:pointer;border-bottom:1px solid #eee;display:flex;align-items:center;gap:10px;background:${activeCivChat?.id===c.id?'#e3f2fd':''}">
+            <div style="width:36px;height:36px;border-radius:50%;background:#1565C0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">P</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:12px">Police Officer${c.officerId?'':' (Pending)'}</div>
+              <div style="font-size:11px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.lastMsg||'...'}</div>
+            </div>
+            <span style="background:${c.status==='pending'?'#fff8e1':c.status==='active'?'#e8f5e9':'#e3f2fd'};color:${c.status==='pending'?'#e65100':c.status==='active'?'#2e7d32':'#1565C0'};border-radius:3px;padding:1px 7px;font-size:9px;font-weight:600;flex-shrink:0">${c.status.toUpperCase()}</span>
+          </div>`).join('') || '<div style="padding:20px;text-align:center;color:#aaa;font-size:12px;font-family:var(--font-mono)">No conversations</div>'}
+          <div style="padding:12px">
+            <button class="civ-btn civ-btn-primary" style="width:100%;justify-content:center;font-size:11px" onclick="startNewHelplineChat(div)">+ NEW CONVERSATION</button>
+          </div>
+        </div>
+        <div id="civ-chat-area" style="background:#fff;border:1px solid #e0e0e0;border-radius:10px;display:flex;flex-direction:column;min-height:0">
+          ${activeCivChat?civChatHTML(activeCivChat):'<div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:#aaa"><div style="font-size:40px">💬</div><div style="font-family:var(--font-display);font-size:12px;letter-spacing:2px">SELECT A CONVERSATION</div></div>'}
+        </div>
+      </div>`;
+    div.querySelectorAll('[onclick*="civRenderChat"]').forEach(el=>{
+      const id=el.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+      el.onclick=()=>{
+        const chat=DB.find('chats',id); if(chat){activeCivChat=chat;civRenderChat(div,chat);}
+      };
+    });
+  };
+  render();
+  window.civRenderChat=(d,chat)=>{ document.getElementById('civ-chat-area').innerHTML=civChatHTML(chat); attachCivSend(chat.id,d); setTimeout(()=>{const a=document.getElementById('civ-msgs');if(a)a.scrollTop=a.scrollHeight;},50); };
+  window.startNewHelplineChat=(d)=>{
+    const chatId=DB.genId();
+    DB.push('chats',{id:chatId,civilianId:currentUser.id,civilianName:currentUser.name,officerId:null,status:'pending',lastMsg:'Hello, I need assistance.',lastTime:DB.timeStr(),unread:1,createdAt:DB.now()});
+    DB.push('messages',{id:DB.genId(),chatId,senderId:currentUser.id,senderName:currentUser.name,text:'Hello, I need assistance.',type:'text',time:DB.timeStr(),createdAt:DB.now()});
+    render();showToast('Chat started! An officer will respond shortly.');
+  };
+  attachCivSend(activeCivChat?.id,div);
+  setTimeout(()=>{const a=document.getElementById('civ-msgs');if(a)a.scrollTop=a.scrollHeight;},80);
+  return div;
+}
+function civChatHTML(chat){
+  const msgs=(DB.get('messages')||[]).filter(m=>m.chatId===chat.id);
+  const isPending=chat.status==='pending';
+  return `
+    <div style="padding:12px 16px;border-bottom:1px solid #eee;display:flex;align-items:center;gap:10px;flex-shrink:0">
+      <div style="width:36px;height:36px;border-radius:50%;background:#1565C0;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">👮</div>
+      <div><div style="font-weight:700;font-size:13px">${chat.officerId?'Police Officer':'Police Helpline'}</div><div style="font-size:11px;color:#888">${isPending?'Waiting for officer...':'Officer assigned'}</div></div>
+      <span style="margin-left:auto;background:${isPending?'#fff8e1':'#e8f5e9'};color:${isPending?'#e65100':'#2e7d32'};border-radius:3px;padding:2px 8px;font-size:9px;font-weight:600">${chat.status.toUpperCase()}</span>
+    </div>
+    ${isPending?'<div style="background:#fff8e1;border-bottom:1px solid #ffcc80;padding:8px 14px;font-size:11px;color:#e65100;flex-shrink:0">⏳ Your message is pending. An officer will respond shortly.</div>':''}
+    <div id="civ-msgs" style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:4px;min-height:0">
+      ${msgs.map(m=>{
+        const isSelf=m.senderId===currentUser.id;
+        return `<div style="display:flex;flex-direction:column;align-items:${isSelf?'flex-end':'flex-start'};margin-bottom:5px">
+          ${!isSelf?`<div style="font-size:10px;font-weight:600;color:#1565C0;margin-bottom:2px;font-family:var(--font-mono)">👮 ${m.senderName}</div>`:''}
+          <div class="${isSelf?'civ-chat-sent':'civ-chat-recv'}" style="${isSelf?'background:#1565C0;color:#fff;':'background:#e3f2fd;color:#1a1a2e;'}padding:9px 14px;border-radius:16px;font-size:13px;max-width:65%;word-break:break-word">
+            ${m.type==='image'?`<img src="${m.mediaUrl}" style="max-width:180px;border-radius:8px;cursor:pointer" onclick="window.open('${m.mediaUrl}')"/>`:''}
+            ${m.type==='audio'?`<audio src="${m.mediaUrl}" controls style="max-width:180px"></audio>`:''}
+            ${m.text}
+          </div>
+          <div style="font-size:9px;color:#aaa;margin-top:2px;font-family:var(--font-mono)">${m.time}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="padding:12px 14px;border-top:1px solid #eee;display:flex;gap:8px;align-items:center;flex-shrink:0">
+      <input type="file" id="civ-media" accept="image/*,video/*,audio/*" style="display:none" onchange="sendCivMedia(this,'${chat.id}')"/>
+      <button onclick="document.getElementById('civ-media').click()" style="width:36px;height:36px;background:#f0f4f8;border:1px solid #e0e0e0;border-radius:6px;font-size:16px;cursor:pointer">📎</button>
+      <input class="civ-input" id="civ-reply-inp" placeholder="Type a message..." style="flex:1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendCivReply('${chat.id}')}"/>
+      <button class="civ-btn civ-btn-primary" style="padding:8px 16px;font-size:11px" onclick="sendCivReply('${chat.id}')">SEND</button>
+    </div>`;
+}
+function attachCivSend(chatId,div){
+  if(!chatId) return;
+  window._civChatId=chatId;
+}
+function sendCivReply(chatId){
+  const inp=document.getElementById('civ-reply-inp');
+  const text=inp?.value?.trim();
+  if(!text) return;
+  DB.push('messages',{id:DB.genId(),chatId,senderId:currentUser.id,senderName:currentUser.name,text,type:'text',time:DB.timeStr(),createdAt:DB.now()});
+  DB.update('chats',chatId,{lastMsg:text,lastTime:DB.timeStr()});
+  inp.value='';
+  const chat=DB.find('chats',chatId);
+  if(chat){ document.getElementById('civ-chat-area').innerHTML=civChatHTML(chat); setTimeout(()=>{const a=document.getElementById('civ-msgs');if(a)a.scrollTop=a.scrollHeight;},30); }
+}
+function sendCivMedia(inp,chatId){
+  const f=inp.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    const type=f.type.startsWith('image/')?'image':f.type.startsWith('video/')?'video':'audio';
+    DB.push('messages',{id:DB.genId(),chatId,senderId:currentUser.id,senderName:currentUser.name,text:'',mediaUrl:e.target.result,type,time:DB.timeStr(),createdAt:DB.now()});
+    DB.update('chats',chatId,{lastMsg:'['+type.toUpperCase()+']',lastTime:DB.timeStr()});
+    const chat=DB.find('chats',chatId);
+    if(chat){ document.getElementById('civ-chat-area').innerHTML=civChatHTML(chat); setTimeout(()=>{const a=document.getElementById('civ-msgs');if(a)a.scrollTop=a.scrollHeight;},30); }
+    showToast('Media sent!');
+  };
+  r.readAsDataURL(f);
+}
+</script>
+</body>
+</html>
+HTMLEOF
+echo "Done. Size: $(wc -l < /mnt/user-data/outputs/PoliceTech_Pro_v2.html) lines"
